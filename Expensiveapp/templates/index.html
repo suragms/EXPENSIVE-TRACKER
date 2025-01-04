@@ -1,0 +1,553 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Expense Tracker</title>
+    <meta name="description" content="Track your spending, unlock your savings.">
+    <meta name="keywords" content="Expense Tracker, Budgeting, Financial Management">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+
+    <!-- Favicons -->
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            color: #333;
+            background-color: #f3f6f9;
+            scroll-behavior: smooth; /* Smooth scrolling */
+        }
+
+        /* Navbar */
+        #header {
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 15px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+
+        #header.sticky {
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+
+        .navmenu ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .navmenu a {
+            color: #fff;
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .navmenu a:hover {
+            color: #17a2b8;
+            transform: scale(1.1);
+        }
+
+        .logo span {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #fff;
+        }
+
+
+        /* Hero Video Section */
+       /* Hero Section */
+/* Hero Section */
+#hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background: url('{% static "img\amt8.jpg" %}') no-repeat center center/cover; /* Keep the background image */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7); /* Light overlay for a softer look */
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    color: #D9CBA0; /* Primary Color: Dark Beige */
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 4em; /* Larger font for more impact */
+    margin-bottom: 20px;
+    text-shadow: none; /* Removed text shadow for a cleaner look */
+}
+
+p {
+    font-size: 1.4em;
+    margin-bottom: 30px;
+    color: #5e5950; /* Secondary Color: Light Beige */
+}
+
+.hero-buttons a {
+    display: inline-block;
+    padding: 12px 40px;
+    margin: 10px;
+    border-radius: 50px;
+    background-color: #FF6F61; /* Accent Color: Coral */
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 1.1em;
+    box-shadow: 0 6px 20px rgba(255, 111, 97, 0.5); /* Adjusted button shadow */
+}
+
+.hero-buttons a:hover {
+    background-color: #FF5A47; /* Darker coral on hover */
+    transform: translateY(-6px); /* Elevate on hover */
+    box-shadow: 0 10px 30px rgba(255, 90, 67, 0.7);
+}
+
+/* Optional: Additional styles for a light background */
+body {
+    background-color: #F7F7F7; /* Background Color: Light Gray */
+    margin: 0;
+    font-family: Arial, sans-serif; /* Font family for a modern look */
+}
+
+
+/* Optional: Additional styles for a light background */
+body {
+    background-color: #F7F7F7; /* Background Color: Light Gray */
+    margin: 0;
+    font-family: Arial, sans-serif; /* Font family for a modern look */
+}
+
+        /* @keyframes textGlow {
+            from {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 1);
+            }
+        } */
+
+        /* Quote Section */
+        #quote {
+            background-color: #eef2f7;
+            padding: 60px 20px;
+            text-align: center;
+            margin-top: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        #quote h2 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #333;
+            text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #quote p {
+            font-size: 1.3em;
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Images Section */
+        #images {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        #images h2 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            color: #333;
+            text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        .image-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+
+        .image-grid img {
+            width: 300px;
+            border-radius: 12px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-grid img:hover {
+            transform: scale(1.07);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: #222;
+            color: #ddd;
+            padding: 40px;
+            text-align: center;
+            margin-top: 50px;
+            border-top: 2px solid #17a2b8;
+        }
+
+        .footer a {
+            color: #17a2b8;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #138496;
+            transform: scale(1.1);
+        }
+        .features-section {
+    padding: 40px 20px;
+    background-color: #f8f9fa; /* Light background color */
+    text-align: center; /* Center the title */
+}
+
+.features-title {
+    /* font-size: 2em; */
+    margin-bottom: 20px;
+    color: #6b6b42; /* Darker text for contrast */
+    font-weight: bold;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 15px; /* Space between images */
+    padding: 0 10px; /* Padding around the grid */
+}
+
+.feature-image {
+    width: 100%; /* Make images responsive */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Rounded corners */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+.feature-image:hover {
+    transform: scale(1.05); /* Slight zoom effect */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+}
+.features-section {
+    padding: 40px 20px;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.features-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #6b6b42;
+    font-weight: bold;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 0 10px;
+}
+
+.feature-item {
+    text-align: center; /* Center the text under each image */
+}
+
+.feature-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.feature-description {
+    margin-top: 10px; /* Space between image and description */
+    font-size: 1em; /* Size of the description text */
+    color: #666; /* A lighter color for the description */
+}
+#about {
+    padding: 60px 20px;
+    background-color: #f8f9fa;
+    text-align: left; /* Align text to the left */
+}
+
+.about-title {
+    font-size: 2em;
+    /* font-size: 2.5rem; */
+    color: #6b6b42;
+    margin-bottom: 20px;
+    text-align: center; /* Center the title */
+}
+
+.about-content {
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Center items vertically */
+    max-width: 1200px; /* Increase max width for larger content */
+    margin: 0 auto; /* Center the content */
+}
+
+.about-image {
+    width: 70%; /* Increase image width */
+    max-width: 600px; /* Set max width for responsiveness */
+    height: auto;
+    border-radius: 50px; /* Add more rounded corners */
+    /* clip-path: path('M 0 50 C 25 0, 75 100, 100 50 L 100 100 L 0 100 Z'); */
+    margin-right: 20px; /* Space between image and text */
+}
+
+.about-description {
+    font-size: 1.2rem;
+    color: #333;
+    padding: 0 20px;
+    flex: 1; /* Allow text to take remaining space */
+}
+
+
+
+
+
+
+        /* Scroll animations using AOS */
+        [data-aos] {
+            opacity: 0;
+            transition-property: opacity, transform;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* General Styles for Header */
+.header {
+    background-color: #D9CBA0; /* Dark Beige for header background */
+    padding: 15px 20px; /* Padding around the header */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Logo Styles */
+.logo-container .logo {
+    font-size: 1em; /* Larger font size for the logo */
+    color: #FFF; /* White color for the logo text */
+    text-decoration: none; /* Remove underline */
+}
+
+/* Navigation Menu Styles */
+.navmenu {
+    margin-left: auto; /* Push the nav to the right */
+}
+
+.navmenu ul {
+    display: flex; /* Align items in a row */
+    gap: 20px; /* Space between items */
+}
+
+/* Navigation Links Styles */
+.navmenu a {
+    color: #F5E1B5; /* Light Beige for text */
+    text-decoration: none; /* Remove underline */
+    font-weight: 500; /* Medium font weight */
+    position: relative; /* To allow positioning of pseudo elements */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Icon Styles */
+.navmenu a i {
+    margin-right: 5px; /* Space between icon and text */
+    font-size: 1.2em; /* Size of the icons */
+}
+
+/* Hover Effect for Links */
+.navmenu a:hover {
+    color: #FF6F61; /* Change to coral on hover */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .navmenu ul {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+        gap: 10px; /* Space between stacked items */
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header id="header" class="header d-flex align-items-center">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <div class="logo-container">
+                <a href="/index/" class="logo">
+                    <span class="sitename">Expense Tracker</span>
+                </a>
+            </div>
+            <nav id="navmenu" class="navmenu d-flex">
+                <ul class="d-flex list-unstyled">
+                    <li><a href="/adminlogin/"><i class="bi bi-person-lock"></i> Admin Login</a></li>
+                    <li><a href="/login/"><i class="bi bi-person"></i> User Login</a></li>
+                    <li><a href="/userfeedback_list/"><i class="bi bi-chat-dots"></i> Feedback</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+
+    <!-- Hero Section with Transparent Video Background -->
+    <section id="hero" class="hero-background">
+        <div class="hero-overlay"></div>
+        <div class="hero-content" data-aos="fade-up">
+            <h1>Track Your Expenses Effortlessly</h1>
+            <p>Control your budget and improve your financial well-being.</p>
+            <div class="hero-buttons">
+                <a href="/user_register/" class="btn-get-started">Get Started</a>
+                <a href="{% static 'video/expense-tracker-intro.mp4' %}" class="btn-watch-video">Watch Introduction</a>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Quote Section -->
+    <section id="about">
+        <h2 class="about-title">About Us</h2>
+        <div class="about-content">
+            
+            <img src="{% static 'img/amt3.jpg' %}" alt="About Us" class="about-image">
+            <p class="about-description">
+                At Expense Tracker, we are committed to empowering individuals to take control of their financial future. Our intuitive tools and resources help you track your spending, manage budgets, and achieve your financial goals with confidence. 
+              
+            </p>
+        </div>
+    </section>
+    
+
+    <!-- Images Section -->
+    <section id="images" class="features-section">
+        <h2 class="features-title">Key Benefits of Our Website</h2>
+        <div class="image-grid">
+            <div class="feature-item">
+                <img src="{% static 'img/img1.jpg' %}" alt="Feature 1" class="feature-image">
+                <p class="feature-description">Effortlessly manage your finances without the need for complex calculations.</p>
+            </div>
+            <div class="feature-item">
+                <img src="{% static 'img/amt5.jpg' %}" alt="Feature 2" class="feature-image">
+                <p class="feature-description">Enabling you to identify unnecessary expenses and save money more effectively.</p>
+            </div>
+            <div class="feature-item">
+                <img src="{% static 'img/img2.jpg' %}" alt="Feature 3" class="feature-image">
+                <p class="feature-description">Enjoy hassle-free financial tracking, allowing you to bypass the need for calculations.</p>
+            </div>
+            <div class="feature-item">
+                <img src="{% static 'img/img3.jpg' %}" alt="Feature 4" class="feature-image">
+                <p class="feature-description">Review your financial performance through sophisticated graphical analyses.</p>
+            </div>
+        </div>
+    </section>
+    
+    
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h4>&copy; 2024 Expense Tracker. All rights reserved.</h4>
+        <h4>Follow us on <a href="#">Social Media</a></h4>
+    </footer>
+
+    <!-- Vendor JS Files -->
+    <script src="{% static 'vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        // Initialize AOS (Animate On Scroll Library)
+        AOS.init();
+
+        // Sticky Navbar on scroll
+        window.addEventListener('scroll', function () {
+            const header = document.querySelector('#header');
+            header.classList.toggle('sticky', window.scrollY > 100);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback List - Admin</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            /* padding: 20px;  Added padding for better spacing */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;  /* Set a max width for better layout on large screens */
+            margin: 0 310px;     /* Center the container */
+            padding: 30px;      /* Added padding to the container */
+            background-color: #ffffff; /* Background for the container */
+            border-radius: 10px;  /* Rounded corners for the container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+
+        .table {
+            border-radius: 10px; /* Rounded corners for the table */
+            overflow: hidden;    /* Prevents overflow of rounded corners */
+            margin-top: 20px;    /* Spacing above the table */
+        }
+
+        .table th {
+            background-color: #343a40; /* Dark background for header */
+            color: #ffffff;  /* White text color */
+            text-align: center; /* Center align the text */
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f2f2f2; /* Light gray for odd rows */
+        }
+
+        .table-striped tbody tr:hover {
+            background-color: #e1f5fe; /* Light blue hover effect */
+        }
+
+        .feedback-text {
+            max-width: 400px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .badge-rating {
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 12px;
+            color: white; /* White text for badges */
+        }
+
+        .badge-rating-1 {
+            background-color: #f87171; /* Red for 1 star */
+        }
+
+        .badge-rating-2 {
+            background-color: #fbbf24; /* Yellow for 2 stars */
+        }
+
+        .badge-rating-3 {
+            background-color: #facc15; /* Gold for 3 stars */
+        }
+
+        .badge-rating-4 {
+            background-color: #34d399; /* Green for 4 stars */
+        }
+
+        .badge-rating-5 {
+            background-color: #10b981; /* Dark green for 5 stars */
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #dc3545; /* Red background on hover */
+            color: white; /* White text on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Feedback List</h1>
+
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Sl.no</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Feedback</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Date Submitted</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in data %}
+                <tr>
+                    <th scope="row" style="color: white;">{{ forloop.counter }}</th>
+                    <td>{{ feedback.email }}</td>
+                    <td class="feedback-text">{{ feedback.feedback_text }}</td>
+                    <td>
+                        <span class="badge badge-rating badge-rating-{{ feedback.rating }}">
+                            {{ feedback.rating }} / 5
+                        </span>
+                    </td>
+                    <td>{{ feedback.created_at|date:"F j, Y, g:i a" }}</td>
+                    <td>
+                        <a href="/delete_feedbacks/{{ feedback.id }}/" class="btn btn-outline-danger btn-sm" style="transition: all 0.3s;">
+                            <i class="bi bi-trash-fill"></i> DELETE
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No feedback available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}

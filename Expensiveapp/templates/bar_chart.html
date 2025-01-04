@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Expenses Bar Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Styling for the body and header */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        
+        /* Container for the chart */
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 80%;
+            width: 600px;
+        }
+        
+        /* Customize the canvas size */
+        #barChart {
+            max-width: 100%;
+            height: 400px;
+        }
+        /* Homepage Button Styling */
+        .homepage-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .homepage-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .homepage-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="homepage-btn-container">
+        <a href="/usershome/" class="homepage-btn">Homepage</a>
+        <a href="/view/" class="homepage-btn">Back</a>
+    </div>
+    <h2>Monthly Expenses Overview</h2>
+    
+    <div class="chart-container">
+        {% if has_expenses %}
+            <canvas id="barChart"></canvas>
+            <script>
+                const labels = JSON.parse('{{ labels|escapejs }}');
+                const amounts = JSON.parse('{{ amounts|escapejs }}');
+                
+                const ctx = document.getElementById('barChart').getContext('2d');
+                const barChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Monthly Expenses',
+                            data: amounts,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            hoverBackgroundColor: 'rgba(75, 192, 192, 0.8)',
+                            hoverBorderColor: 'rgba(75, 192, 192, 1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    color: '#333',
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0,0,0,0.7)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                titleFont: { size: 16 },
+                                bodyFont: { size: 14 }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#555',
+                                    font: {
+                                        size: 13
+                                    }
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#555',
+                                    font: {
+                                        size: 13
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(200, 200, 200, 0.3)',
+                                    borderDash: [3, 3]
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+        {% else %}
+            <p style="color: #555; font-size: 1.1em;">No expenses to display for this user.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

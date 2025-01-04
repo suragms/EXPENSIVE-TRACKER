@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback and Rating Form</title>
+    <style>
+        /* Base reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9fb;
+            color: #333;
+        }
+        /* Glowing animation */
+        @keyframes glowing {
+            0% {
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.4), 0 0 10px rgba(0, 123, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 123, 255, 0.7), 0 0 30px rgba(0, 123, 255, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.4), 0 0 10px rgba(0, 123, 255, 0.2);
+            }
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            animation: glowing 2s infinite ease-in-out;
+            transition: all 0.3s ease;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 25px;
+            color: #333;
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        label {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #f7f7f7;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
+        textarea {
+            resize: none;
+            min-height: 120px;
+        }
+        .rating {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .rating label {
+            font-size: 45px;
+            color: #ccc;
+            padding: 0 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .rating input[type="radio"] {
+            display: none;
+        }
+        .rating input[type="radio"]:checked ~ label {
+            color: #ffc107;
+        }
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #ffc107;
+            transform: scale(1.2);
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                margin: 30px 20px;
+                padding: 30px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            button {
+                font-size: 16px;
+            }
+        }
+         /* Homepage Button Styling */
+         .homepage-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .homepage-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .homepage-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="homepage-btn-container">
+        <a href="/usershome/" class="homepage-btn">Homepage</a>
+    </div>
+    <div class="container">
+        <h1>Feedback Form</h1>
+        <form method="post">
+            {% csrf_token %}
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email..." required>
+
+            <label for="feedback">Your Feedback:</label>
+            <textarea id="feedback" name="feedback_text" placeholder="Write your feedback here..." required></textarea>
+
+            <div class="rating">
+                <input type="radio" id="rating5" name="rating" value="5">
+                <label for="rating5" title="5 stars">★</label>
+                <input type="radio" id="rating4" name="rating" value="4">
+                <label for="rating4" title="4 stars">★</label>
+                <input type="radio" id="rating3" name="rating" value="3">
+                <label for="rating3" title="3 stars">★</label>
+                <input type="radio" id="rating2" name="rating" value="2">
+                <label for="rating2" title="2 stars">★</label>
+                <input type="radio" id="rating1" name="rating" value="1">
+                <label for="rating1" title="1 star">★</label>
+            </div>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+</body>
+</html>

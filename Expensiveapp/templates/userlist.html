@@ -1,0 +1,90 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+<style>
+    .main-content {
+        height: 100vh; /* Full height of the viewport */
+        overflow-y: auto; /* Enable vertical scrolling */
+        margin: 0 ; /* No margin */
+        padding: 0; /* No padding */
+        position: absolute; /* Positioning to start from top-left */
+        top: 0; /* Align to the top */
+        left: 250px; /* Align next to the sidebar (assuming sidebar width is 250px) */
+        width: calc(100% - 250px); /* Take full width minus sidebar */
+    }
+
+    .content-area {
+        height: calc(100vh - 30px); /* Adjust height for content area */
+    }
+
+    .center-container {
+        display: flex;
+        justify-content: flex-start; /* Align content to the left */
+        width: 100%;
+        margin: 0 80px;   
+    }
+
+    .card {
+        width: 100%; /* Full width for the card */
+        max-width: 900px; /* Limit the card's max width */
+        margin: 0; /* Remove any margin */
+    }
+
+    .table-responsive {
+        max-height: 70vh; /* Limit the height for scrolling */
+        overflow-y: auto;
+    }
+</style>
+
+<div class="main-content">
+    <div class="top-bar">
+        <h4>User Management</h4>
+    </div>
+
+    <div class="content-area">
+        <div class="container-fluid mt-2 center-container">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">User List</h5>
+                    <p class="card-text">View and manage all registered users below.</p>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Email ID</th>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>{{ user.first_name }}</td>
+                                    <td>{{ user.last_name }}</td>
+                                    <td>{{ user.email_id }}</td>
+                                    <td>
+                                        {% if user.image %}
+                                        <img src="{{ user.image.url }}" alt="User Image" class="img-fluid rounded-circle shadow-sm" style="width: 50px; height: 50px;">
+                                        {% else %}
+                                        <span class="text-muted">No Image</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="/delete_user/{{ user.id }}/" class="btn btn-outline-danger btn-sm" style="transition: all 0.3s;">
+                                            <i class="bi bi-trash-fill"></i> DELETE
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

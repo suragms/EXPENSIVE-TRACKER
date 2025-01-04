@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>User Profile</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom right, #e0eafc, #cfdef3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Profile Container */
+        .profile-container {
+            background-color: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .profile-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Cover Image Section */
+        .cover-image {
+            height: 100px;
+            background: linear-gradient(to right, #007bff, #00c6ff);
+        }
+
+        /* Profile Info Section */
+        .profile-info-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background-color: white;
+        }
+
+        .profile-image {
+            margin-top: -60px;
+        }
+
+        .profile-image img {
+            width: 150px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-details {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .profile-details h2 {
+            font-size: 26px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .profile-details p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            box-shadow: 0 5px 15px rgba(0, 91, 187, 0.3);
+        }
+
+        /* Editable Section */
+        .edit-section {
+            padding: 30px;
+            background-color: #f9f9f9;
+        }
+
+        .edit-section h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .edit-section form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        /* Editable Text Section */
+        .profile-text {
+            padding: 12px;
+            font-size: 16px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Save and Cancel Buttons */
+        .edit-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .edit-buttons .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-save {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #218838;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-cancel {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #c82333;
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-container {
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .profile-info-section {
+                padding: 20px;
+            }
+
+            .profile-details h2 {
+                font-size: 22px;
+            }
+
+            .edit-section form {
+                gap: 15px;
+            }
+        }
+                /* Homepage Button Styling */
+                .homepage-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .homepage-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .homepage-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="homepage-btn-container">
+        <a href="/usershome/" class="homepage-btn">Homepage</a>
+        <!-- <a href="/view/" class="homepage-btn">Back</a> -->
+    </div>
+    {% if user %}
+    <div class="profile-container">
+        <!-- Cover Image -->
+        <div class="cover-image"></div>
+
+        <!-- Profile Info Section -->
+        <div class="profile-info-section">
+            <div class="profile-image">
+                {% if user.image %}
+                <img src="{{ user.image.url }}" alt="Profile Picture">
+                {% endif %}
+            </div>
+            <div class="profile-details">
+                <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+                <div class="action-buttons">
+                    <a href="/userprofile_edit/{{ user.id }}/"><button class="btn btn-primary" type="button">Edit Profile</button></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editable Section -->
+        <div class="edit-section">
+            <h2>User Profile</h2>
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <div class="profile-text"><strong>{{ user.first_name }}</strong></div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <div class="profile-text"><strong>{{ user.last_name }}</strong></div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <div class="profile-text"><strong>{{ user.email_id }}</strong></div>
+                </div>
+                <!-- <div class="form-group">
+                    <label for="phone">Phone number:</label>
+                    <input type="password" id="password" placeholder="New Password">
+                </div> -->
+
+                <div class="edit-buttons">
+                    <button type="submit" class="btn btn-save">Save Changes</button>
+                    <button type="reset" class="btn btn-cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</body>
+</html>

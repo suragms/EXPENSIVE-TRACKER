@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/admin.css' %}" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background-color: #343a40;
+            padding-top: 20px;
+            position: fixed;
+            width: 250px;
+            color: #ffffff;
+            transition: width 0.3s;
+        }
+
+        .sidebar a {
+            color: #ffffff;
+            padding: 15px;
+            text-decoration: none;
+            display: block;
+            font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+
+        .top-bar {
+            background-color: #ffffff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-area {
+            padding: 20px;
+        }
+
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Sidebar animation for collapse */
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed a {
+            text-align: center;
+            font-size: 0;
+        }
+
+        .sidebar.collapsed a i {
+            font-size: 24px;
+        }
+
+        .sidebar-toggler {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h2 class="text-center">Admin Panel</h2>
+        <a href="/admin_dashboard/" class="active"><i class="bi bi-house-door"></i> Dashboard</a>
+        <a href="/users/"><i class="bi bi-people"></i> Manage Users</a>
+        <a href="/feedbacklist/"><i class="bi bi-gear"></i> Feedbacks</a>
+        <a href="{% url 'index' %}"><i class="bi bi-box-arrow-right"></i> home</a>
+        <a href="/logout/"><i class="bi bi-box-arrow-right"></i> Logout</a>
+    </div>
+    {% block content %}
+    <div class="main-content">
+        
+        <div class="top-bar">
+            <h4>Welcome, Admin</h4>
+            <div>
+                <i class="sidebar-toggler bi bi-list"></i>
+                <!-- <a href="/profile/" class="ml-3"><i class="bi bi-person-circle"></i> Profile</a> -->
+            </div>
+        </div>
+
+        <div class="content-area">
+            <h2>Dashboard Overview</h2>
+            <p>Here you can view the latest activity, manage users, and review reports.</p>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Users</h5>
+                            <p class="card-text">View and manage all the registered users.</p>
+                            <a href="/users/" class="btn btn-primary">Go to Users</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Feedback</h5>
+                            <p class="card-text">Access feedback and rating given by user</p>
+                            <a href="/feedbacklist/" class="btn btn-primary">View Feedback and rating</a>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+     {% endblock %}
+
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        // Toggle sidebar visibility on click
+        const sidebarToggler = document.querySelector('.sidebar-toggler');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+
+        sidebarToggler.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            mainContent.style.marginLeft = sidebar.classList.contains('collapsed') ? '80px' : '250px';
+        });
+    </script>
+</body>
+
+</html>

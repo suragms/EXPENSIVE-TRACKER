@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        /* Galaxy Background Animation */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at 50% 50%, #1a1a2e, #000000 90%);
+            background-size: 200% 200%;
+            animation: galaxyGlow 8s infinite alternate;
+            color: white;
+        }
+
+        @keyframes galaxyGlow {
+            from {
+                background-position: 0% 0%;
+            }
+            to {
+                background-position: 100% 100%;
+            }
+        }
+
+        /* Container Styling */
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            max-width: 300px; /* Reduced width */
+            width: 90%;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 5px;
+            text-align: justify; /* Justify alignment */
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        input[type="file"] {
+            font-size: 0.9rem;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        input:focus {
+            box-shadow: 0 0 8px #4caf50;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(90deg, #4caf50, #3e8e41);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(72, 191, 88, 0.4);
+        }
+
+        .error {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: -8px;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+                max-width: 90%;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            button[type="submit"] {
+                font-size: 0.85rem;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>User Registration</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- First Name Field -->
+            <label for="first_name">First Name</label>
+            <input type="text" name="first_name" id="first_name" placeholder="Enter your first name" required>
+            {% if form.first_name.errors %}
+                <div class="error">{{ form.first_name.errors }}</div>
+            {% endif %}
+
+            <!-- Last Name Field -->
+            <label for="last_name">Last Name</label>
+            <input type="text" name="last_name" id="last_name" placeholder="Enter your last name" required>
+            {% if form.last_name.errors %}
+                <div class="error">{{ form.last_name.errors }}</div>
+            {% endif %}
+
+            <!-- Email Field -->
+            <label for="email_id">Email</label>
+            <input type="email" name="email_id" id="email_id" placeholder="Enter your email" required>
+            {% if form.email_id.errors %}
+                <div class="error">{{ form.email_id.errors }}</div>
+            {% endif %}
+
+            <!-- Phone Number Field -->
+            <label for="phone">Phone Number</label>
+            <input type="tel" name="phone" id="phone" maxlength="10" placeholder="Enter your phone number" required>
+            {% if form.phone.errors %}
+                <div class="error">{{ form.phone.errors }}</div>
+            {% endif %}
+
+            <!-- Password Field -->
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Enter your password" required>
+            {% if form.password.errors %}
+                <div class="error">{{ form.password.errors }}</div>
+            {% endif %}
+
+            <!-- Confirm Password Field -->
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm your password" required>
+            {% if form.confirm_password.errors %}
+                <div class="error">{{ form.confirm_password.errors }}</div>
+            {% endif %}
+
+            <!-- Image Upload Field -->
+            <label for="profile_image">Profile Image</label>
+            <input type="file" name="profile_image" id="profile_image" accept="image/*">
+            {% if form.profile_image.errors %}
+                <div class="error">{{ form.profile_image.errors }}</div>
+            {% endif %}
+
+            <!-- Submit Button -->
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>

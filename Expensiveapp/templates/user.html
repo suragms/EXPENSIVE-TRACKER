@@ -1,0 +1,615 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Expense Tracker - Efficient Financial Management</title>
+    <meta name="description" content="Monitor and manage your expenses effortlessly with our intuitive expense tracking tool.">
+    <meta name="keywords" content="Expense Tracking, Budget Planning, Financial Management">
+
+    <!-- Favicons -->
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Main CSS File -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f5f7;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: #0d1b2a;
+            padding: 15px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo .sitename {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .navmenu ul {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .navmenu li {
+            margin-left: 20px;
+        }
+
+        .navmenu a {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navmenu a:hover {
+            color: #84a9ac;
+        }
+
+        .btn-getstarted {
+            background: linear-gradient(135deg, #3a506b, #5bc0be);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-left: auto;
+        }
+
+        .btn-getstarted:hover {
+            background: #5bc0be;
+        }
+
+        /* Hero Section */
+        #hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 140px 0;
+            background: linear-gradient(to right, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.7)), url("{% static 'img/hero-bg.jpg' %}") center/cover no-repeat;
+            color: #fff;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #10b981;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: #d1d5db;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Slider Section */
+        .slider-section {
+            padding: 80px 0;
+            background-color: #f1f5f9;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 400px;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Video Section */
+        .video-section {
+            padding: 60px 0;
+            background-color: #f3f4f6;
+            text-align: center;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Chart Section */
+        .chart-section {
+            padding: 60px 0;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        #pieChartContainer,
+        #barChartContainer {
+            margin: 0 auto;
+            width: 75%;
+            max-width: 800px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0d1b2a;
+            color: #fff;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        footer h4 {
+            margin-bottom: 20px;
+        }
+
+        footer p {
+            color: #d1d5db;
+            font-size: 0.9rem;
+        }
+
+        .social-icons a {
+            color: #fff;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #60a5fa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="/index/" class="sitename">Expense Tracker</a>
+            </div>
+            <style>
+                /* Styles for navigation links */
+                .nav-link {
+                    color: #333;
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                }
+            
+                /* Hover effect for navigation links */
+                .nav-link:hover {
+                    color: #007bff; /* Adjust to desired hover color */
+                    text-decoration: underline;
+                }
+            
+                /* Icon size */
+                .profile-link i, .logout-link i {
+                    font-size: 1.2em;
+                    margin-right: 5px;
+                }
+            
+                /* Hover effect for icons */
+                .logout-link:hover i, .profile-link:hover i {
+                    color: #007bff;
+                }
+            </style>
+            
+            <nav class="navmenu d-flex align-items-center justify-content-between">
+                <ul class="d-flex list-unstyled mb-0">
+                    <!-- Left-aligned menu items -->
+                    <li><a href="/add/" class="nav-link">Add</a></li>
+                    <li><a href="/view/" class="nav-link">View</a></li>
+                    <li><a href="/feedback_rate/" class="nav-link">Feedback</a></li>
+                </ul>
+            
+                <!-- Right-aligned profile and logout -->
+                <div class="d-flex align-items-center">
+                    <a href="/userprofile/" class="profile-link nav-link">
+                        <i class="bi bi-person-circle"></i> <!-- Bootstrap profile icon -->
+                        <span>Profile</span>
+                    </a>
+                    <a href="/logout/" class="logout-link nav-link">
+                        <i class="bi bi-box-arrow-right"></i> <!-- Bootstrap logout icon -->
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </nav>
+                     
+            
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-content">
+            <h1><span style="color: #D2B48C;">Track Your Spending, Unlock Your </span><span style="color: #D2B48C;">Savings</span></h1>
+            <p>Take control of your finances with our user-friendly expense tracking tool. Simplify budgeting and maximize savings!</p>
+        </div>
+    </section><br><br>
+    
+    <style>
+        #hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #f4f4f5; /* Light, soft white */
+            background-image: url('{% static "img/amt4.jpg" %}'); /* Path to your background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6); /* Slightly dark overlay */
+            border-radius: 10px;
+        }
+        
+        #hero h1 {
+            font-size: 3em;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        
+        #hero h1 span {
+            color: #34d399; /* Green shade for "Spending" */
+        }
+    
+        #hero h1 span:last-child {
+            color: #60a5fa; /* Blue shade for "Savings" */
+        }
+        
+        #hero p {
+            font-size: 1.2em;
+            color: #f5f5dc; /* Soft gray for the paragraph text */
+        }
+    </style>
+      
+
+<section class="hero-content-section">
+    <!-- Image Container -->
+    <div class="image-container">
+        <img src="{% static 'img/amt2.jpg' %}" alt="Financial Overview Image">
+    </div>
+
+    <!-- Text Content Section -->
+    <div class="text-content">
+        <h1>Welcome to Expense Tracker</h1>
+        <p>Managing your finances has never been easier. At Expense Tracker, we provide you with powerful tools to monitor your spending, budget effectively, and plan for a more secure financial future. Whether you're looking to save more, eliminate debt, or simply get a clearer picture of your expenses, our platform is designed to help you achieve your goals. Start taking charge of your finances today and experience the peace of mind that comes with financial clarity and control.</p>
+        <a href="/add/" class="btn-get-started">Get Started</a>
+    </div>
+</section><br><br>
+
+<style>
+/* Flex Container */
+.hero-content-section {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background-color: #fff; /* Optional: adds contrast between container and page */
+}
+
+/* Image Container */
+.image-container {
+    width: 45%; /* Adjust to your preference */
+    margin-right: 20px; /* Space between image and content */
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Text Content */
+.text-content {
+    width: 55%;
+}
+
+.text-content h1 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.text-content p {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.btn-get-started {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #10b981;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-get-started:hover {
+    background-color: #059669;
+}
+.services-section {
+    padding: 60px 20px;
+    background-color: #f4f5f7;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.section-description {
+    font-size: 1em;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.services-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.service-item {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.service-item:hover {
+    transform: translateY(-5px);
+}
+
+.service-icon {
+    font-size: 2em;
+    color: #0d6efd;
+    margin-bottom: 10px;
+}
+
+.service-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.service-description {
+    font-size: 0.95em;
+    color: #666;
+    line-height: 1.5;
+}
+/* Section Title Styling */
+.section-title {
+    font-size: 2.5em;
+    color: #242627; /* Accent color */
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+/* Section Description Styling */
+.section-description {
+    font-size: 1.2em;
+    color: #555; /* Subtle gray color */
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 30px auto; /* Center-align with top/bottom margin */
+    line-height: 1.5;
+}
+
+
+</style>
+
+
+
+    <!-- Video Tutorial Section -->
+    <!-- <section class="video-section">
+        <h2>Watch Our Video Tutorial</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </section> -->
+
+    <!-- Chart Section -->
+    <!-- <section class="chart-section">
+        <h2>Expense Breakdown</h2> -->
+
+        <!-- services for Expense Categories -->
+        <section id="services" class="services-section">
+            <div class="container">
+                <h2 class="section-title">Our Services</h2>
+                <p class="section-description">Explore the comprehensive tools we offer to help you track and manage your finances with ease.</p>
+                
+                <div class="services-container">
+                    <div class="service-item">
+                        <div class="service-icon">📊</div>
+                        <h3 class="service-title">Income Tracking</h3>
+                        <p class="service-description">Easily track all income sources and understand your earnings over time.</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">💰</div>
+                        <h3 class="service-title">Expense Management</h3>
+                        <p class="service-description">Record your expenses and analyze spending habits to stay within your budget.</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">📅</div>
+                        <h3 class="service-title">Monthly Budgets</h3>
+                        <p class="service-description">Set and manage monthly budgets, helping you plan for your financial goals.</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">🔔</div>
+                        <h3 class="service-title">Sending Alerts</h3>
+                        <p class="service-description">Receive notifications when your spending nears your limit.</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">📈</div>
+                        <h3 class="service-title">Detailed Reports</h3>
+                        <p class="service-description">Generate reports on income, expenses, and savings to analyze your financial health.</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">📝</div>
+                        <h3 class="service-title">Feedback</h3>
+                        <p class="service-description">Share your experiences and suggestions to help us improve our services.</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">⭐</div>
+                        <h3 class="service-title">Rating</h3>
+                        <p class="service-description">Rate our services to help others find a reliable expense tracking tool.</p>
+                    </div>
+                    <!-- <div class="service-item">
+                        <div class="service-icon">🎯</div>
+                        <h3 class="service-title">Goal Setting</h3>
+                        <p class="service-description">Set and track financial goals, like saving for a trip or paying off debt.</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">💳</div>
+                        <h3 class="service-title">Recurring Payments Management</h3>
+                        <p class="service-description">Track and manage recurring bills and subscriptions to avoid late fees.</p>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">📊</div>
+                        <h3 class="service-title">Investment Insights</h3>
+                        <p class="service-description">Monitor investments over time to understand asset growth and value.</p>
+                    </div> -->
+                </div>
+            </div>
+        </section>
+        
+        
+
+        <!-- Bar Chart for Monthly Expense Overview -->
+        <div id="barChartContainer">
+            <canvas id="barChart"></canvas>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <h4>Stay Connected</h4>
+            <div class="social-icons">
+                <a href="#"><i class="bi bi-facebook"></i></a>
+                <a href="#"><i class="bi bi-twitter"></i></a>
+                <a href="#"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-linkedin"></i></a>
+            </div>
+            <p>&copy; 2024 Expense Tracker. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        AOS.init();
+
+        // Swiper Initialization
+        var swiper = new Swiper('.swiper-container', {
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+
+        // Chart.js Initialization
+        var pieCtx = document.getElementById('pieChart').getContext('2d');
+        var barCtx = document.getElementById('barChart').getContext('2d');
+
+        var pieChart = new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Rent', 'Groceries', 'Utilities', 'Entertainment', 'Others'],
+                datasets: [{
+                    data: [300, 150, 100, 80, 50],
+                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#6b7280'],
+                }],
+            },
+            options: {
+                responsive: true,
+            },
+        });
+
+        var barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May'],
+                datasets: [{
+                    label: 'Monthly Expenses',
+                    data: [500, 700, 800, 650, 900],
+                    backgroundColor: '#3b82f6',
+                }],
+            },
+            options: {
+                responsive: true,
+            },
+        });
+    </script>
+
+</body>
+
+</html>

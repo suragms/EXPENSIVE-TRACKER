@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Options</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom right, #e2e8f0, #f0f4f8); /* Softer gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Options Container */
+        .options-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px; /* Slightly rounder corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
+            text-align: center;
+            width: 100%; /* Make it responsive */
+            max-width: 450px; /* Set a max width for the container */
+            transition: transform 0.2s; /* Animation for hover effect */
+        }
+
+        .options-container:hover {
+            transform: scale(1.02); /* Slightly enlarge on hover */
+        }
+
+        h2 {
+            color: #2c3e50; /* Darker blue-grey for the heading */
+            margin-bottom: 30px;
+            font-size: 24px; /* Increase font size for better visibility */
+            font-weight: 600; /* Bolder font weight */
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #007bff; /* Primary blue color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform for button */
+            text-decoration: none; /* Remove underline from link */
+            display: inline-block; /* Ensures the button maintains block-like characteristics */
+        }
+
+        .btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        .btn-secondary {
+            background-color: #28a745; /* Soft green for secondary buttons */
+        }
+
+        .btn-secondary:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+        /* Homepage Button Styling */
+        .homepage-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .homepage-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .homepage-btn:hover {
+            background-color: #0056b3;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .options-container {
+                padding: 30px; /* Reduce padding on smaller screens */
+            }
+
+            h2 {
+                font-size: 20px; /* Adjust heading size for smaller screens */
+            }
+
+            .btn {
+                font-size: 14px; /* Adjust button size for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="homepage-btn-container">
+        <a href="/usershome/" class="homepage-btn">Homepage</a>
+    </div>
+    <div class="options-container">
+        <h2>What would you like to do next?</h2>
+      
+        <a href="/add_income/{{user.id}}/"><button class="btn btn-secondary">Add Income</button></a>
+        
+        <a href="/add_expense/{{user.id}}/"><button class="btn btn-secondary">Add Expense</button></a>
+        <a href="/add_bill/{{user.id}}/"><button class="btn btn-secondary">Upload Bills</button></a>
+    </div>
+</body>
+</html>
