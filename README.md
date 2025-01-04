@@ -1,0 +1,1 @@
+Expense Tracker Web Application is a simple, efficient tool built with Python and Django to manage personal finances. It allows users to track expenses and income, categorize transactions, upload bill images, and generate insightful financial reports. With its user-friendly interface, this project aims to simplify financial management and promote better financial literacy.
