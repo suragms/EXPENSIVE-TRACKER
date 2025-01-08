@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Professional Portfolio</title>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Surag</h1>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="home">
+        <div class="container">
+            <div class="content">
+                <h1>Hi, I'm <span>Surag</span></h1>
+                <h3>Aspiring Software Developer</h3>
+                <p>I am pursuing my MCA at CCSIT Thalikulam, Calicut University. I specialize in Python programming and web development.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+                <a href="#contact" class="btn">Hire Me</a>
+            </div>
+            <div class="image">
+                <img src="profile.jpg" alt="Profile Image">
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <p>I am a tech enthusiast passionate about building efficient solutions. I enjoy working with Python, Java, and modern web development technologies.</p>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Services</h2>
+            <div class="service-boxes">
+                <div class="box">
+                    <i class="fas fa-code"></i>
+                    <h3>Web Development</h3>
+                    <p>Building responsive, modern, and efficient websites.</p>
+                </div>
+                <div class="box">
+                    <i class="fas fa-database"></i>
+                    <h3>Database Management</h3>
+                    <p>Designing and optimizing high-performance database systems.</p>
+                </div>
+                <div class="box">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile App Development</h3>
+                    <p>Creating user-friendly and engaging mobile applications.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Projects</h2>
+            <div class="project-list">
+                <div class="project">
+                    <h3>Expense Tracker</h3>
+                    <p>A Django-based application to manage and visualize expenses efficiently.</p>
+                </div>
+                <div class="project">
+                    <h3>Weather App</h3>
+                    <p>A Python application that provides real-time weather updates using APIs.</p>
+                </div>
+                <div class="project">
+                    <h3>Portfolio Website</h3>
+                    <p>A personal website showcasing my skills and projects.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact Me</h2>
+            <form action="#" method="POST">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" required></textarea>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 0);
+        });
+    </script>
+</body>
+
+</html>
