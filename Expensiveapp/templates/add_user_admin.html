@@ -1,0 +1,674 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+<style>
+    /* Add User Admin Specific Styles */
+    .add-user-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .add-user-header {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 2rem 2.5rem;
+        border-radius: 1.5rem 1.5rem 0 0;
+        margin-bottom: 0;
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .add-user-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        pointer-events: none;
+    }
+
+    .add-user-header h2 {
+        margin: 0;
+        font-weight: 800;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .add-user-header .header-icon {
+        font-size: 2.2rem;
+        opacity: 0.9;
+    }
+
+    .add-user-header p {
+        margin: 0.75rem 0 0;
+        opacity: 0.9;
+        font-size: 1.1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .add-user-content {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 0 0 1.5rem 1.5rem;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+    }
+
+    .form-section h3 {
+        color: #1e293b;
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.95rem;
+    }
+
+    .form-label.required::after {
+        content: ' *';
+        color: #ef4444;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.875rem 1.25rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.75rem;
+        font-size: 0.95rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .form-input.error {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-input.success {
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .form-textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .file-upload-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .file-upload-input {
+        position: absolute;
+        left: -9999px;
+    }
+
+    .file-upload-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        border: 2px dashed #d1d5db;
+        border-radius: 0.75rem;
+        background: #f9fafb;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-weight: 500;
+        color: #6b7280;
+    }
+
+    .file-upload-label:hover {
+        border-color: #10b981;
+        background: #f0fdf4;
+        color: #10b981;
+    }
+
+    .file-upload-label.has-file {
+        border-color: #10b981;
+        background: #f0fdf4;
+        color: #10b981;
+    }
+
+    .file-preview {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    .file-preview img {
+        max-width: 150px;
+        max-height: 150px;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-cancel {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        color: white;
+        border: none;
+        padding: 0.875rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+    }
+
+    .btn-cancel:hover {
+        background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 0.875rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .alert {
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        margin-bottom: 1.5rem;
+        border: none;
+        font-weight: 500;
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, rgba(209, 250, 229, 0.95), rgba(167, 243, 208, 0.95));
+        color: #065f46;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, rgba(254, 226, 226, 0.95), rgba(254, 202, 202, 0.95));
+        color: #991b1b;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .password-strength {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .password-strength.weak {
+        color: #ef4444;
+    }
+
+    .password-strength.medium {
+        color: #f59e0b;
+    }
+
+    .password-strength.strong {
+        color: #10b981;
+    }
+
+    .form-help {
+        font-size: 0.85rem;
+        color: #6b7280;
+        margin-top: 0.25rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .add-user-header {
+            padding: 1.5rem;
+        }
+
+        .add-user-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .add-user-content {
+            padding: 1.5rem;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn-cancel,
+        .btn-submit {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="add-user-container">
+    <!-- Add User Header -->
+    <div class="add-user-header">
+        <h2>
+            <i class="bi bi-person-plus-fill header-icon"></i>
+            Add New User
+        </h2>
+        <p>Create a new user account with complete profile information</p>
+    </div>
+
+    <!-- Add User Content -->
+    <div class="add-user-content">
+        <!-- Display Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="bi bi-{% if message.tags == 'success' %}check-circle{% else %}exclamation-triangle{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data" id="addUserForm">
+            {% csrf_token %}
+            
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <h3>
+                    <i class="bi bi-person"></i>
+                    Personal Information
+                </h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name" class="form-label required">First Name</label>
+                        <input type="text" 
+                               id="first_name" 
+                               name="first_name" 
+                               class="form-input" 
+                               required 
+                               placeholder="Enter first name">
+                        <div class="form-help">Enter the user's first name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="last_name" class="form-label required">Last Name</label>
+                        <input type="text" 
+                               id="last_name" 
+                               name="last_name" 
+                               class="form-input" 
+                               required 
+                               placeholder="Enter last name">
+                        <div class="form-help">Enter the user's last name</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email_id" class="form-label required">Email Address</label>
+                    <input type="email" 
+                           id="email_id" 
+                           name="email_id" 
+                           class="form-input" 
+                           required 
+                           placeholder="Enter email address">
+                    <div class="form-help">This will be used as the login username</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="tel" 
+                           id="phone" 
+                           name="phone" 
+                           class="form-input" 
+                           placeholder="Enter phone number">
+                    <div class="form-help">Optional: Enter contact phone number</div>
+                </div>
+            </div>
+
+            <!-- Security Section -->
+            <div class="form-section">
+                <h3>
+                    <i class="bi bi-shield-lock"></i>
+                    Security & Authentication
+                </h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password" class="form-label required">Password</label>
+                        <input type="password" 
+                               id="password" 
+                               name="password" 
+                               class="form-input" 
+                               required 
+                               placeholder="Enter password">
+                        <div class="password-strength" id="passwordStrength"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm_password" class="form-label required">Confirm Password</label>
+                        <input type="password" 
+                               id="confirm_password" 
+                               name="confirm_password" 
+                               class="form-input" 
+                               required 
+                               placeholder="Confirm password">
+                        <div class="form-help" id="passwordMatch"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Image Section -->
+            <div class="form-section">
+                <h3>
+                    <i class="bi bi-image"></i>
+                    Profile Image
+                </h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Profile Picture</label>
+                    <div class="file-upload-container">
+                        <input type="file" 
+                               id="profile_image" 
+                               name="profile_image" 
+                               class="file-upload-input" 
+                               accept="image/*">
+                        <label for="profile_image" class="file-upload-label" id="fileUploadLabel">
+                            <i class="bi bi-cloud-upload"></i>
+                            <span>Choose a profile image or drag and drop here</span>
+                        </label>
+                    </div>
+                    <div class="form-help">Recommended size: 300x300 pixels. Max size: 5MB</div>
+                    <div class="file-preview" id="filePreview"></div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <a href="{% url 'user_list' %}" class="btn-cancel">
+                    <i class="bi bi-x-circle"></i>
+                    Cancel
+                </a>
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="bi bi-person-plus"></i>
+                    Create User
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Password strength checker
+function checkPasswordStrength(password) {
+    let strength = 0;
+    let feedback = '';
+    
+    if (password.length >= 8) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    
+    if (strength < 3) {
+        feedback = 'Weak password';
+        return { strength: 'weak', feedback };
+    } else if (strength < 5) {
+        feedback = 'Medium strength password';
+        return { strength: 'medium', feedback };
+    } else {
+        feedback = 'Strong password';
+        return { strength: 'strong', feedback };
+    }
+}
+
+// Password match checker
+function checkPasswordMatch() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    const matchDiv = document.getElementById('passwordMatch');
+    
+    if (confirmPassword === '') {
+        matchDiv.textContent = '';
+        matchDiv.className = 'form-help';
+        return false;
+    }
+    
+    if (password === confirmPassword) {
+        matchDiv.textContent = '✓ Passwords match';
+        matchDiv.className = 'form-help';
+        matchDiv.style.color = '#10b981';
+        return true;
+    } else {
+        matchDiv.textContent = '✗ Passwords do not match';
+        matchDiv.className = 'form-help';
+        matchDiv.style.color = '#ef4444';
+        return false;
+    }
+}
+
+// File upload preview
+function handleFileUpload(input) {
+    const file = input.files[0];
+    const preview = document.getElementById('filePreview');
+    const label = document.getElementById('fileUploadLabel');
+    
+    if (file) {
+        // Check file size (5MB limit)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('File size must be less than 5MB');
+            input.value = '';
+            return;
+        }
+        
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            input.value = '';
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+            label.classList.add('has-file');
+            label.innerHTML = `<i class="bi bi-check-circle"></i><span>${file.name}</span>`;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.innerHTML = '';
+        label.classList.remove('has-file');
+        label.innerHTML = `<i class="bi bi-cloud-upload"></i><span>Choose a profile image or drag and drop here</span>`;
+    }
+}
+
+// Form validation
+function validateForm() {
+    const requiredFields = ['first_name', 'last_name', 'email_id', 'password', 'confirm_password'];
+    let isValid = true;
+    
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (!field.value.trim()) {
+            field.classList.add('error');
+            isValid = false;
+        } else {
+            field.classList.remove('error');
+        }
+    });
+    
+    if (!checkPasswordMatch()) {
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    const fileInput = document.getElementById('profile_image');
+    const form = document.getElementById('addUserForm');
+    
+    // Password strength
+    passwordInput.addEventListener('input', function() {
+        const strength = checkPasswordStrength(this.value);
+        const strengthDiv = document.getElementById('passwordStrength');
+        strengthDiv.textContent = strength.feedback;
+        strengthDiv.className = `password-strength ${strength.strength}`;
+    });
+    
+    // Password match
+    confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+    
+    // File upload
+    fileInput.addEventListener('change', function() {
+        handleFileUpload(this);
+    });
+    
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        if (!validateForm()) {
+            e.preventDefault();
+            alert('Please fill in all required fields correctly.');
+        }
+    });
+    
+    // Real-time validation
+    const inputs = form.querySelectorAll('input[required]');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.classList.add('error');
+            } else {
+                this.classList.remove('error');
+            }
+        });
+        
+        input.addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('error');
+                this.classList.add('success');
+            } else {
+                this.classList.remove('success');
+            }
+        });
+    });
+});
+
+// Drag and drop functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const dropZone = document.getElementById('fileUploadLabel');
+    const fileInput = document.getElementById('profile_image');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight(e) {
+        dropZone.classList.add('has-file');
+    }
+    
+    function unhighlight(e) {
+        dropZone.classList.remove('has-file');
+    }
+    
+    dropZone.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        fileInput.files = files;
+        handleFileUpload(fileInput);
+    }
+});
+</script>
+{% endblock %} 

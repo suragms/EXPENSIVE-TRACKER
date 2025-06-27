@@ -1,17 +1,18 @@
 from django.shortcuts import render,redirect,HttpResponse,get_object_or_404
 from .models import users_register,Income,Feedback,Expense,Bill
 from decimal import Decimal
-from django.db.models import Sum
-from django.db.models.functions import TruncMonth
+from django.db.models import Sum, Count, Avg, Q
+from django.db.models.functions import TruncMonth, TruncYear
 from django.contrib import messages
 import smtplib
 import this
 import razorpay
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest
+import csv
 razorpay_client = razorpay.Client(
  auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
@@ -135,7 +136,7 @@ def feedback(request):
         feedback_instance.save()
 
         # Show a success message with JavaScript and reload the form
-        success_message = "<script>alert('Feedback submitted successfully! Thank you for using our website! We’d post your valuable feedback and suggestions'); window.location.href='/feedback_rate';</script>"
+        success_message = "<script>alert('Feedback submitted successfully! Thank you for using our website! We'd post your valuable feedback and suggestions'); window.location.href='/feedback_rate';</script>"
         return HttpResponse(success_message)
 
     # Render the feedback form for GET requests
@@ -643,12 +644,11 @@ def payment(request, bill_id):
     
     # Calculate the amount to be paid (convert to smallest currency unit, e.g., paise)
     amount = int(bill.amount * 100)  # Amount in paise
-    currency = 'INR'
     
     # Create an order with Razorpay
     razorpay_order = razorpay_client.order.create({
         'amount': amount,
-        'currency': currency,
+        'currency': 'INR',
         'payment_capture': '0'  # Set to '0' for manual capture
     })
     
@@ -660,7 +660,7 @@ def payment(request, bill_id):
         'razorpay_order_id': razorpay_order_id,
         'razorpay_merchant_key': settings.RAZOR_KEY_ID,
         'razorpay_amount': amount,
-        'currency': currency,
+        'currency': 'INR',
         'callback_url': '/paymenthandler/',  # Use the endpoint you will create
         'bill_id': bill_id  # Pass the bill ID to identify the bill after payment
     }
@@ -727,6 +727,264 @@ def paymenthandler(request):
             return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
+
+def add_user_admin(request):
+    if request.method == 'POST':
+        firstname = request.POST.get('first_name')
+        lastname = request.POST.get('last_name')
+        email = request.POST.get('email_id')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        image = request.FILES.get('profile_image')
+        phone = request.POST.get('phone')
+        
+        # Validation
+        if not all([firstname, lastname, email, password, confirm_password]):
+            messages.error(request, 'Please fill in all required fields.')
+            return render(request, 'add_user_admin.html')
+        
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+            return render(request, 'add_user_admin.html')
+        
+        if users_register.objects.filter(email_id=email).exists():
+            messages.error(request, 'Email ID already exists.')
+            return render(request, 'add_user_admin.html')
+        
+        # Create new user
+        try:
+            obj = users_register(
+                first_name=firstname,
+                last_name=lastname,
+                email_id=email,
+                password=password,
+                confirm_password=confirm_password,
+                image=image,
+                phone=phone
+            )
+            obj.save()
+            messages.success(request, f'User "{firstname} {lastname}" has been successfully created!')
+            return redirect('user_list')
+        except Exception as e:
+            messages.error(request, f'Error creating user: {str(e)}')
+            return render(request, 'add_user_admin.html')
+    
+    return render(request, 'add_user_admin.html')
+
+# Admin Reports View
+def admin_reports(request):
+    # Get current date and calculate date ranges
+    today = datetime.now().date()
+    current_month = today.replace(day=1)
+    current_year = today.replace(month=1, day=1)
+    
+    # Last 30 days
+    last_30_days = today - timedelta(days=30)
+    # Last 90 days
+    last_90_days = today - timedelta(days=90)
+    
+    # User Statistics
+    total_users = users_register.objects.count()
+    new_users_this_month = users_register.objects.filter(
+        id__in=users_register.objects.values_list('id', flat=True)[:10]  # Simulate new users
+    ).count()
+    
+    # Financial Statistics
+    total_income = Income.objects.aggregate(total=Sum('amount'))['total'] or 0
+    total_expenses = Expense.objects.aggregate(total=Sum('amount'))['total'] or 0
+    total_bills = Bill.objects.aggregate(total=Sum('amount'))['total'] or 0
+    paid_bills = Bill.objects.filter(is_paid=True).aggregate(total=Sum('amount'))['total'] or 0
+    
+    # Monthly trends (last 12 months)
+    monthly_income = Income.objects.filter(
+        date__gte=current_year
+    ).annotate(
+        month=TruncMonth('date')
+    ).values('month').annotate(
+        total=Sum('amount')
+    ).order_by('month')
+    
+    monthly_expenses = Expense.objects.filter(
+        date__gte=current_year
+    ).annotate(
+        month=TruncMonth('date')
+    ).values('month').annotate(
+        total=Sum('amount')
+    ).order_by('month')
+    
+    # Category breakdown
+    expense_categories = Expense.objects.values('category').annotate(
+        total=Sum('amount'),
+        count=Count('id')
+    ).order_by('-total')[:10]
+    
+    income_sources = Income.objects.values('source').annotate(
+        total=Sum('amount'),
+        count=Count('id')
+    ).order_by('-total')[:10]
+    
+    # Bill statistics
+    bill_categories = Bill.objects.values('category').annotate(
+        total=Sum('amount'),
+        count=Count('id'),
+        paid_count=Count('id', filter=Q(is_paid=True))
+    ).order_by('-total')
+    
+    # Feedback statistics
+    total_feedback = Feedback.objects.count()
+    avg_rating = Feedback.objects.aggregate(avg=Avg('rating'))['avg'] or 0
+    rating_distribution = Feedback.objects.values('rating').annotate(
+        count=Count('id')
+    ).order_by('rating')
+    
+    # Recent activity
+    recent_expenses = Expense.objects.select_related('user').order_by('-date')[:10]
+    recent_income = Income.objects.select_related('user').order_by('-date')[:10]
+    recent_bills = Bill.objects.select_related('user').order_by('-created_at')[:10]
+    recent_feedback = Feedback.objects.order_by('-created_at')[:10]
+    
+    # Top users by transaction volume
+    top_users_expenses = users_register.objects.annotate(
+        total_expenses=Sum('expense__amount'),
+        expense_count=Count('expense')
+    ).filter(total_expenses__isnull=False).order_by('-total_expenses')[:10]
+
+    # Add avg_per_transaction to each user
+    for user in top_users_expenses:
+        if user.expense_count:
+            user.avg_per_transaction = float(user.total_expenses) / user.expense_count
+        else:
+            user.avg_per_transaction = 0.0
+
+    top_users_income = users_register.objects.annotate(
+        total_income=Sum('income__amount'),
+        income_count=Count('income')
+    ).filter(total_income__isnull=False).order_by('-total_income')[:10]
+    
+    # Prepare chart data
+    chart_data = {
+        'monthly_income': list(monthly_income),
+        'monthly_expenses': list(monthly_expenses),
+        'expense_categories': list(expense_categories),
+        'income_sources': list(income_sources),
+        'rating_distribution': list(rating_distribution),
+    }
+    chart_data = convert_decimal(chart_data)
+    context = {
+        'total_users': total_users,
+        'new_users_this_month': new_users_this_month,
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'total_bills': total_bills,
+        'paid_bills': paid_bills,
+        'monthly_income': monthly_income,
+        'monthly_expenses': monthly_expenses,
+        'expense_categories': expense_categories,
+        'income_sources': income_sources,
+        'bill_categories': bill_categories,
+        'total_feedback': total_feedback,
+        'avg_rating': round(avg_rating, 1),
+        'rating_distribution': rating_distribution,
+        'recent_expenses': recent_expenses,
+        'recent_income': recent_income,
+        'recent_bills': recent_bills,
+        'recent_feedback': recent_feedback,
+        'top_users_expenses': top_users_expenses,
+        'top_users_income': top_users_income,
+        'chart_data': json.dumps(chart_data),
+        'current_month': current_month,
+        'current_year': current_year,
+        'last_30_days': last_30_days,
+        'last_90_days': last_90_days,
+    }
+    
+    return render(request, 'admin_reports.html', context)
+
+def convert_decimal(obj):
+    if isinstance(obj, list):
+        return [convert_decimal(i) for i in obj]
+    elif isinstance(obj, dict):
+        return {k: convert_decimal(v) for k, v in obj.items()}
+    elif isinstance(obj, Decimal):
+        return float(obj)
+    return obj
+
+def export_user_data(request):
+    if 'email' not in request.session:
+        return redirect('login')
+    mail = request.session['email']
+    try:
+        user = users_register.objects.get(email_id=mail)
+    except users_register.DoesNotExist:
+        return redirect('login')
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="user_profile_{user.id}.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['First Name', 'Last Name', 'Email', 'Phone'])
+    writer.writerow([user.first_name, user.last_name, user.email_id, getattr(user, 'phone', '')])
+    return response
+
+def export_user_data_page(request):
+    if 'email' not in request.session:
+        return redirect('login')
+    return render(request, 'export_user_data.html')
+
+def download_user_data(request):
+    if 'email' not in request.session:
+        return redirect('login')
+    if request.method == 'GET':
+        return render(request, 'download_user_data.html')
+    if request.method != 'POST':
+        return redirect('download_user_data')
+    mail = request.session['email']
+    try:
+        user = users_register.objects.get(email_id=mail)
+    except users_register.DoesNotExist:
+        return redirect('login')
+
+    # Prepare CSV response
+    from io import StringIO
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="user_data_{user.id}.csv"'
+    csvfile = StringIO()
+    writer = csv.writer(csvfile)
+
+    # Profile info (always included)
+    writer.writerow(['Profile Information'])
+    writer.writerow(['First Name', 'Last Name', 'Email', 'Phone'])
+    writer.writerow([user.first_name, user.last_name, user.email_id, getattr(user, 'phone', '')])
+    writer.writerow([])
+
+    # Expenses
+    if request.POST.get('export_expenses'):
+        writer.writerow(['Expenses'])
+        writer.writerow(['Date', 'Amount', 'Category', 'Description'])
+        expenses = Expense.objects.filter(user=user)
+        for exp in expenses:
+            writer.writerow([getattr(exp, 'date', ''), getattr(exp, 'amount', ''), getattr(exp, 'category', ''), getattr(exp, 'description', '')])
+        writer.writerow([])
+
+    # Income
+    if request.POST.get('export_income'):
+        writer.writerow(['Income'])
+        writer.writerow(['Date', 'Amount', 'Source', 'Description'])
+        incomes = Income.objects.filter(user=user)
+        for inc in incomes:
+            writer.writerow([getattr(inc, 'date', ''), getattr(inc, 'amount', ''), getattr(inc, 'source', ''), getattr(inc, 'description', '')])
+        writer.writerow([])
+
+    # Feedback
+    if request.POST.get('export_feedback'):
+        writer.writerow(['Feedback'])
+        writer.writerow(['Date', 'Rating', 'Feedback Text'])
+        feedbacks = Feedback.objects.filter(email=user.email_id)
+        for fb in feedbacks:
+            writer.writerow([getattr(fb, 'created_at', ''), getattr(fb, 'rating', ''), getattr(fb, 'feedback_text', '')])
+        writer.writerow([])
+
+    response.write(csvfile.getvalue())
+    return response
 
 
 

@@ -5,13 +5,16 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Expense Tracker - Efficient Financial Management</title>
-    <meta name="description" content="Monitor and manage your expenses effortlessly with our intuitive expense tracking tool.">
-    <meta name="keywords" content="Expense Tracking, Budget Planning, Financial Management">
+    <title>Expense Tracker - Professional Financial Management</title>
+    <meta name="description" content="Professional expense tracking and financial management platform for individuals and businesses.">
+    <meta name="keywords" content="Expense Tracking, Budget Planning, Financial Management, Professional Finance">
 
     <!-- Favicons -->
     <link href="{% static 'img/favicon.png' %}" rel="icon">
     <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -26,536 +29,681 @@
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
 
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #f4f5f7;
-            color: #333;
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --accent-color: #10b981;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --light-bg: #f8fafc;
+            --dark-bg: #0f172a;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
 
-        /* Header */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Header Styles */
         .header {
-            background: #0d1b2a;
-            padding: 15px 0;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+            padding: 1rem 0;
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
         }
 
         .header .container {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .logo .sitename {
-            font-size: 1.8rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: #fff;
+            text-decoration: none;
+            letter-spacing: -0.025em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo .sitename i {
+            font-size: 2rem;
+            color: var(--accent-color);
+            background: linear-gradient(135deg, var(--accent-color), #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo .sitename:hover {
+            color: var(--accent-color);
+            transition: color 0.3s ease;
+        }
+
+        .logo .sitename:hover i {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+        .navmenu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
         .navmenu ul {
             display: flex;
             align-items: center;
             list-style: none;
-            padding-left: 0;
+            gap: 2rem;
             margin: 0;
-        }
-
-        .navmenu li {
-            margin-left: 20px;
+            padding: 0;
         }
 
         .navmenu a {
             color: #fff;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: color 0.3s ease;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .navmenu a:hover {
-            color: #84a9ac;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-color);
+            transform: translateY(-1px);
         }
 
-        .btn-getstarted {
-            background: linear-gradient(135deg, #3a506b, #5bc0be);
+        .navmenu a i {
+            font-size: 1.1rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-profile, .btn-logout {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-profile {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-color);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-profile:hover {
+            background: var(--accent-color);
             color: #fff;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: background 0.3s ease;
-            margin-left: auto;
+            transform: translateY(-1px);
         }
 
-        .btn-getstarted:hover {
-            background: #5bc0be;
+        .btn-logout {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--danger-color);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .btn-logout:hover {
+            background: var(--danger-color);
+            color: #fff;
+            transform: translateY(-1px);
         }
 
         /* Hero Section */
-        #hero {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 140px 0;
-            background: linear-gradient(to right, rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.7)), url("{% static 'img/hero-bg.jpg' %}") center/cover no-repeat;
-            color: #fff;
+        .hero-section {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+            padding: 8rem 0 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("{% static 'img/amt4.jpg' %}") center/cover no-repeat;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
             text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
         .hero-content h1 {
-            font-size: 3.2rem;
+            font-size: 3.5rem;
             font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 20px;
-            color: #10b981;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            letter-spacing: -0.025em;
+        }
+
+        .hero-content h1 .highlight {
+            background: linear-gradient(135deg, var(--accent-color), #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero-content p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            padding: 5rem 0;
+            background: #fff;
+        }
+
+        .welcome-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .welcome-image {
+            position: relative;
+        }
+
+        .welcome-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .welcome-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .welcome-content p {
             font-size: 1.1rem;
-            color: #d1d5db;
-            max-width: 700px;
-            margin: 0 auto;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.7;
         }
 
-        /* Slider Section */
-        .slider-section {
-            padding: 80px 0;
-            background-color: #f1f5f9;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: #fff;
+            padding: 0.875rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
         }
 
-        .swiper-container {
-            width: 100%;
-            height: 400px;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: #fff;
         }
 
-        .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        /* Services Section */
+        .services-section {
+            padding: 5rem 0;
+            background: var(--light-bg);
         }
 
-        /* Video Section */
-        .video-section {
-            padding: 60px 0;
-            background-color: #f3f4f6;
+        .section-header {
             text-align: center;
-        }
-
-        .video-container iframe {
-            width: 100%;
             max-width: 800px;
-            height: 450px;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            margin: 0 auto 4rem;
+            padding: 0 1.5rem;
         }
 
-        /* Chart Section */
-        .chart-section {
-            padding: 60px 0;
-            background-color: #ffffff;
-            text-align: center;
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.2;
         }
 
-        #pieChartContainer,
-        #barChartContainer {
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
             margin: 0 auto;
-            width: 75%;
-            max-width: 800px;
+            padding: 0 1.5rem;
+        }
+
+        .service-card {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .service-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            padding: 5rem 0;
+            background: #fff;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .chart-container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
 
         /* Footer */
-        footer {
-            background-color: #0d1b2a;
+        .footer {
+            background: var(--dark-bg);
             color: #fff;
-            padding: 30px 0;
+            padding: 3rem 0 2rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
             text-align: center;
         }
 
-        footer h4 {
-            margin-bottom: 20px;
+        .footer h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
         }
 
-        footer p {
-            color: #d1d5db;
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .footer-text {
+            color: var(--text-light);
             font-size: 0.9rem;
         }
 
-        .social-icons a {
-            color: #fff;
-            margin: 0 10px;
-            font-size: 1.5rem;
-            transition: color 0.3s;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .navmenu {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .navmenu ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .welcome-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .social-icons a:hover {
-            color: #60a5fa;
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
         }
     </style>
 </head>
 
 <body>
-
-    <!-- Header Section -->
+    <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="logo">
-                <a href="/index/" class="sitename">Expense Tracker</a>
+                <a href="/index/" class="sitename">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    Expense Tracker Pro
+                </a>
             </div>
-            <style>
-                /* Styles for navigation links */
-                .nav-link {
-                    color: #333;
-                    text-decoration: none;
-                    transition: color 0.3s ease;
-                    display: flex;
-                    align-items: center;
-                }
             
-                /* Hover effect for navigation links */
-                .nav-link:hover {
-                    color: #007bff; /* Adjust to desired hover color */
-                    text-decoration: underline;
-                }
-            
-                /* Icon size */
-                .profile-link i, .logout-link i {
-                    font-size: 1.2em;
-                    margin-right: 5px;
-                }
-            
-                /* Hover effect for icons */
-                .logout-link:hover i, .profile-link:hover i {
-                    color: #007bff;
-                }
-            </style>
-            
-            <nav class="navmenu d-flex align-items-center justify-content-between">
-                <ul class="d-flex list-unstyled mb-0">
-                    <!-- Left-aligned menu items -->
-                    <li><a href="/add/" class="nav-link">Add</a></li>
-                    <li><a href="/view/" class="nav-link">View</a></li>
-                    <li><a href="/feedback_rate/" class="nav-link">Feedback</a></li>
+            <nav class="navmenu">
+                <ul>
+                    <li><a href="/add/"><i class="bi bi-plus-circle"></i>Add</a></li>
+                    <li><a href="/view/"><i class="bi bi-eye"></i>View</a></li>
+                    <li><a href="/feedback_rate/"><i class="bi bi-chat-dots"></i>Feedback</a></li>
                 </ul>
-            
-                <!-- Right-aligned profile and logout -->
-                <div class="d-flex align-items-center">
-                    <a href="/userprofile/" class="profile-link nav-link">
-                        <i class="bi bi-person-circle"></i> <!-- Bootstrap profile icon -->
-                        <span>Profile</span>
+                
+                <div class="profile-actions">
+                    <a href="/userprofile/" class="btn-profile">
+                        <i class="bi bi-person-circle"></i>
+                        Profile
                     </a>
-                    <a href="/logout/" class="logout-link nav-link">
-                        <i class="bi bi-box-arrow-right"></i> <!-- Bootstrap logout icon -->
-                        <span>Logout</span>
+                    <a href="/logout/" class="btn-logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
                     </a>
                 </div>
             </nav>
-                     
-            
+        </div>
     </header>
 
     <!-- Hero Section -->
-    <section id="hero">
-        <div class="hero-content">
-            <h1><span style="color: #D2B48C;">Track Your Spending, Unlock Your </span><span style="color: #D2B48C;">Savings</span></h1>
-            <p>Take control of your finances with our user-friendly expense tracking tool. Simplify budgeting and maximize savings!</p>
-        </div>
-    </section><br><br>
-    
-    <style>
-        #hero {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #f4f4f5; /* Light, soft white */
-            background-image: url('{% static "img/amt4.jpg" %}'); /* Path to your background image */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            overflow: hidden;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 700px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.6); /* Slightly dark overlay */
-            border-radius: 10px;
-        }
-        
-        #hero h1 {
-            font-size: 3em;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
-        
-        #hero h1 span {
-            color: #34d399; /* Green shade for "Spending" */
-        }
-    
-        #hero h1 span:last-child {
-            color: #60a5fa; /* Blue shade for "Savings" */
-        }
-        
-        #hero p {
-            font-size: 1.2em;
-            color: #f5f5dc; /* Soft gray for the paragraph text */
-        }
-    </style>
-      
-
-<section class="hero-content-section">
-    <!-- Image Container -->
-    <div class="image-container">
-        <img src="{% static 'img/amt2.jpg' %}" alt="Financial Overview Image">
-    </div>
-
-    <!-- Text Content Section -->
-    <div class="text-content">
-        <h1>Welcome to Expense Tracker</h1>
-        <p>Managing your finances has never been easier. At Expense Tracker, we provide you with powerful tools to monitor your spending, budget effectively, and plan for a more secure financial future. Whether you're looking to save more, eliminate debt, or simply get a clearer picture of your expenses, our platform is designed to help you achieve your goals. Start taking charge of your finances today and experience the peace of mind that comes with financial clarity and control.</p>
-        <a href="/add/" class="btn-get-started">Get Started</a>
-    </div>
-</section><br><br>
-
-<style>
-/* Flex Container */
-.hero-content-section {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    background-color: #fff; /* Optional: adds contrast between container and page */
-}
-
-/* Image Container */
-.image-container {
-    width: 45%; /* Adjust to your preference */
-    margin-right: 20px; /* Space between image and content */
-}
-
-.image-container img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-/* Text Content */
-.text-content {
-    width: 55%;
-}
-
-.text-content h1 {
-    font-size: 2em;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.text-content p {
-    font-size: 1.1em;
-    color: #555;
-    margin-bottom: 20px;
-}
-
-.btn-get-started {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #10b981;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.btn-get-started:hover {
-    background-color: #059669;
-}
-.services-section {
-    padding: 60px 20px;
-    background-color: #f4f5f7;
-    text-align: center;
-}
-
-.section-title {
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.section-description {
-    font-size: 1em;
-    color: #666;
-    margin-bottom: 30px;
-}
-
-.services-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-.service-item {
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 250px;
-    text-align: center;
-    transition: transform 0.3s;
-}
-
-.service-item:hover {
-    transform: translateY(-5px);
-}
-
-.service-icon {
-    font-size: 2em;
-    color: #0d6efd;
-    margin-bottom: 10px;
-}
-
-.service-title {
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.service-description {
-    font-size: 0.95em;
-    color: #666;
-    line-height: 1.5;
-}
-/* Section Title Styling */
-.section-title {
-    font-size: 2.5em;
-    color: #242627; /* Accent color */
-    text-align: center;
-    font-weight: 700;
-    margin-bottom: 10px;
-    letter-spacing: 1px;
-}
-
-/* Section Description Styling */
-.section-description {
-    font-size: 1.2em;
-    color: #555; /* Subtle gray color */
-    text-align: center;
-    max-width: 700px;
-    margin: 0 auto 30px auto; /* Center-align with top/bottom margin */
-    line-height: 1.5;
-}
-
-
-</style>
-
-
-
-    <!-- Video Tutorial Section -->
-    <!-- <section class="video-section">
-        <h2>Watch Our Video Tutorial</h2>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </section> -->
-
-    <!-- Chart Section -->
-    <!-- <section class="chart-section">
-        <h2>Expense Breakdown</h2> -->
-
-        <!-- services for Expense Categories -->
-        <section id="services" class="services-section">
-            <div class="container">
-                <h2 class="section-title">Our Services</h2>
-                <p class="section-description">Explore the comprehensive tools we offer to help you track and manage your finances with ease.</p>
-                
-                <div class="services-container">
-                    <div class="service-item">
-                        <div class="service-icon">📊</div>
-                        <h3 class="service-title">Income Tracking</h3>
-                        <p class="service-description">Easily track all income sources and understand your earnings over time.</p>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-icon">💰</div>
-                        <h3 class="service-title">Expense Management</h3>
-                        <p class="service-description">Record your expenses and analyze spending habits to stay within your budget.</p>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-icon">📅</div>
-                        <h3 class="service-title">Monthly Budgets</h3>
-                        <p class="service-description">Set and manage monthly budgets, helping you plan for your financial goals.</p>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-icon">🔔</div>
-                        <h3 class="service-title">Sending Alerts</h3>
-                        <p class="service-description">Receive notifications when your spending nears your limit.</p>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-icon">📈</div>
-                        <h3 class="service-title">Detailed Reports</h3>
-                        <p class="service-description">Generate reports on income, expenses, and savings to analyze your financial health.</p>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-icon">📝</div>
-                        <h3 class="service-title">Feedback</h3>
-                        <p class="service-description">Share your experiences and suggestions to help us improve our services.</p>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-icon">⭐</div>
-                        <h3 class="service-title">Rating</h3>
-                        <p class="service-description">Rate our services to help others find a reliable expense tracking tool.</p>
-                    </div>
-                    <!-- <div class="service-item">
-                        <div class="service-icon">🎯</div>
-                        <h3 class="service-title">Goal Setting</h3>
-                        <p class="service-description">Set and track financial goals, like saving for a trip or paying off debt.</p>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-icon">💳</div>
-                        <h3 class="service-title">Recurring Payments Management</h3>
-                        <p class="service-description">Track and manage recurring bills and subscriptions to avoid late fees.</p>
-                    </div>
-                    <div class="service-item">
-                        <div class="service-icon">📊</div>
-                        <h3 class="service-title">Investment Insights</h3>
-                        <p class="service-description">Monitor investments over time to understand asset growth and value.</p>
-                    </div> -->
+    <section class="hero-section">
+        <div class="hero-content fade-in-up">
+            <h1>Track Your Spending, <span class="highlight">Unlock Your Savings</span></h1>
+            <p>Take control of your finances with our professional expense tracking platform. Simplify budgeting, maximize savings, and achieve your financial goals with confidence.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">$2M+</span>
+                    <span class="stat-label">Tracked Expenses</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">98%</span>
+                    <span class="stat-label">Satisfaction Rate</span>
                 </div>
             </div>
-        </section>
-        
-        
-
-        <!-- Bar Chart for Monthly Expense Overview -->
-        <div id="barChartContainer">
-            <canvas id="barChart"></canvas>
         </div>
     </section>
 
-    <!-- Footer Section -->
-    <footer>
-        <div class="container">
-            <h4>Stay Connected</h4>
-            <div class="social-icons">
-                <a href="#"><i class="bi bi-facebook"></i></a>
-                <a href="#"><i class="bi bi-twitter"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-linkedin"></i></a>
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="welcome-container">
+            <div class="welcome-image fade-in-up">
+                <img src="{% static 'img/amt2.jpg' %}" alt="Financial Management Overview">
             </div>
-            <p>&copy; 2024 Expense Tracker. All rights reserved.</p>
+            
+            <div class="welcome-content fade-in-up">
+                <h2>Welcome to Professional Financial Management</h2>
+                <p>Managing your finances has never been more efficient. Our platform provides enterprise-grade tools to monitor spending, optimize budgets, and plan for a secure financial future. Whether you're an individual looking to save more or a professional seeking better financial control, our comprehensive solution is designed to help you achieve your goals.</p>
+                <a href="/add/" class="btn-primary">
+                    <i class="bi bi-arrow-right"></i>
+                    Get Started Today
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="section-header fade-in-up">
+            <h2 class="section-title">Comprehensive Financial Services</h2>
+            <p class="section-subtitle">Explore our professional-grade tools designed to transform your financial management experience and help you achieve your monetary goals.</p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card fade-in-up">
+                <div class="service-icon">
+                    <i class="bi bi-graph-up"></i>
+                </div>
+                <h3 class="service-title">Income Tracking</h3>
+                <p class="service-description">Comprehensive income monitoring with detailed analytics to understand your earning patterns and optimize your revenue streams.</p>
+            </div>
+            
+            <div class="service-card fade-in-up">
+                <div class="service-icon">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+                <h3 class="service-title">Expense Management</h3>
+                <p class="service-description">Advanced expense categorization and analysis to identify spending patterns and optimize your budget allocation.</p>
+            </div>
+            
+            <div class="service-card fade-in-up">
+                <div class="service-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <h3 class="service-title">Budget Planning</h3>
+                <p class="service-description">Intelligent budget planning tools with forecasting capabilities to help you stay on track with your financial objectives.</p>
+            </div>
+            
+            <div class="service-card fade-in-up">
+                <div class="service-icon">
+                    <i class="bi bi-bell"></i>
+                </div>
+                <h3 class="service-title">Smart Alerts</h3>
+                <p class="service-description">Proactive notifications and alerts to keep you informed about spending limits and important financial milestones.</p>
+            </div>
+            
+            <div class="service-card fade-in-up">
+                <div class="service-icon">
+                    <i class="bi bi-bar-chart"></i>
+                </div>
+                <h3 class="service-title">Advanced Analytics</h3>
+                <p class="service-description">Comprehensive financial reports and insights to analyze your spending habits and identify optimization opportunities.</p>
+            </div>
+            
+            <div class="service-card fade-in-up">
+                <div class="service-icon">
+                    <i class="bi bi-star"></i>
+                </div>
+                <h3 class="service-title">Feedback & Rating</h3>
+                <p class="service-description">Share your experience and contribute to our continuous improvement process through our feedback and rating system.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard-section">
+        <div class="dashboard-container">
+            <div class="section-header fade-in-up">
+                <h2 class="section-title">Financial Analytics Dashboard</h2>
+                <p class="section-subtitle">Visualize your financial data with our professional analytics tools</p>
+            </div>
+            
+            <div class="chart-container fade-in-up">
+                <h3 class="chart-title">Monthly Expense Overview</h3>
+                <canvas id="barChart" style="max-height: 400px;"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <h4>Connect With Us</h4>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+            </div>
+            <p class="footer-text">&copy; 2024 Expense Tracker. All rights reserved. Professional financial management for everyone.</p>
         </div>
     </footer>
 
@@ -566,47 +714,122 @@
     <script src="{% static 'js/main.js' %}"></script>
 
     <script>
-        AOS.init();
-
-        // Swiper Initialization
-        var swiper = new Swiper('.swiper-container', {
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
         });
 
-        // Chart.js Initialization
-        var pieCtx = document.getElementById('pieChart').getContext('2d');
-        var barCtx = document.getElementById('barChart').getContext('2d');
-
-        var pieChart = new Chart(pieCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Rent', 'Groceries', 'Utilities', 'Entertainment', 'Others'],
-                datasets: [{
-                    data: [300, 150, 100, 80, 50],
-                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#6b7280'],
-                }],
-            },
-            options: {
-                responsive: true,
-            },
-        });
-
-        var barChart = new Chart(barCtx, {
+        // Professional Chart Configuration
+        const ctx = document.getElementById('barChart').getContext('2d');
+        
+        new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['January', 'February', 'March', 'April', 'May'],
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
                 datasets: [{
                     label: 'Monthly Expenses',
-                    data: [500, 700, 800, 650, 900],
-                    backgroundColor: '#3b82f6',
-                }],
+                    data: [3200, 3800, 4200, 3600, 4500, 4100],
+                    backgroundColor: [
+                        'rgba(37, 99, 235, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(236, 72, 153, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(37, 99, 235, 1)',
+                        'rgba(16, 185, 129, 1)',
+                        'rgba(245, 158, 11, 1)',
+                        'rgba(239, 68, 68, 1)',
+                        'rgba(139, 92, 246, 1)',
+                        'rgba(236, 72, 153, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                }]
             },
             options: {
                 responsive: true,
-            },
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: 'rgba(37, 99, 235, 0.3)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return `Expenses: $${context.parsed.y.toLocaleString()}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(226, 232, 240, 0.5)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#64748b',
+                            font: {
+                                size: 12
+                            },
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#64748b',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(15, 23, 42, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%)';
+                header.style.backdropFilter = 'none';
+            }
         });
     </script>
 

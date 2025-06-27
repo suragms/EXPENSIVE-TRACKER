@@ -10,7 +10,9 @@ urlpatterns = [
     path('overview/<int:aid>/',views.overview, name='overview'),
     path('userprofile_edit/<int:eid>/',views.userprofile_edit,name='userprofile_edit'),
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('admin_reports/', views.admin_reports, name='admin_reports'),
     path('users/',views.user_list, name='user_list'),
+    path('add_user_admin/',views.add_user_admin, name='add_user_admin'),
     path('delete_user/<int:did>/',views.delete_user, name='delete_user'),
     path('adminlogin/', views.adminlogin, name='adminlogin'),
     path('feedback_rate/', views.feedback, name='feedback_rate'),
@@ -35,7 +37,6 @@ urlpatterns = [
     path('payment/<int:bill_id>/',views.payment, name='payment'), 
     path('paymenthandler/',views.paymenthandler, name='paymenthandler'),
     path('userfeedback_list/', views.userfeedback_list_view, name='userfeedback_list'),
-    
-
-
+    path('export_user_data/', views.export_user_data_page, name='export_user_data'),
+    path('download_user_data/', views.download_user_data, name='download_user_data'),
 ]

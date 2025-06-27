@@ -1,0 +1,1156 @@
+{% extends 'admin.html' %}
+{% load static %}
+
+{% block content %}
+<div class="child-content">
+    <div class="reports-container">
+        <!-- Header Section -->
+        <div class="page-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1 class="page-title">
+                        <i class="bi bi-graph-up"></i>
+                        Analytics & Reports
+                    </h1>
+                    <p class="page-subtitle">Comprehensive financial insights and system analytics</p>
+                </div>
+                <div class="breadcrumb">
+                    <span class="breadcrumb-item">Dashboard</span>
+                    <i class="bi bi-chevron-right"></i>
+                    <span class="breadcrumb-item active">Reports</span>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Key Metrics</h2>
+        <div class="metrics-overview">
+            <div class="metric-card">
+                <div class="metric-icon users">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+                <div class="metric-content">
+                    <h3>{{ total_users }}</h3>
+                    <p>Total Users</p>
+                    <small>+{{ new_users_this_month }} this month</small>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon income">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+                <div class="metric-content">
+                    <h3>₹{{ total_income|floatformat:0 }}</h3>
+                    <p>Total Income</p>
+                    <small>Across all users</small>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon expenses">
+                    <i class="bi bi-cart-dash"></i>
+                </div>
+                <div class="metric-content">
+                    <h3>₹{{ total_expenses|floatformat:0 }}</h3>
+                    <p>Total Expenses</p>
+                    <small>Across all users</small>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon bills">
+                    <i class="bi bi-receipt"></i>
+                </div>
+                <div class="metric-content">
+                    <h3>₹{{ total_bills|floatformat:0 }}</h3>
+                    <p>Total Bills</p>
+                    <small>₹{{ paid_bills|floatformat:0 }} paid</small>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Trends & Charts</h2>
+        <div class="charts-section">
+            <div class="chart-row">
+                <!-- Monthly Trends Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Monthly Financial Trends</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart active" data-chart="trends">Trends</button>
+                            <button class="btn-chart" data-chart="comparison">Comparison</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="monthlyTrendsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Category Distribution -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Expense Categories</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart active" data-chart="expense-pie">Pie Chart</button>
+                            <button class="btn-chart" data-chart="expense-bar">Bar Chart</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="expenseCategoriesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-row">
+                <!-- Income Sources -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Income Sources</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart active" data-chart="income-pie">Pie Chart</button>
+                            <button class="btn-chart" data-chart="income-bar">Bar Chart</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="incomeSourcesChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- User Rating Distribution -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>User Satisfaction</h3>
+                        <div class="chart-actions">
+                            <button class="btn-chart active" data-chart="rating-bar">Bar Chart</button>
+                            <button class="btn-chart" data-chart="rating-line">Line Chart</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="ratingDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">User Analytics</h2>
+        <div class="analytics-section">
+            <div class="analytics-row">
+                <!-- Top Users -->
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>Top Users by Expenses</h3>
+                        <a href="#" class="btn-view-all">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Total Expenses</th>
+                                    <th>Transactions</th>
+                                    <th>Avg/Transaction</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in top_users_expenses %}
+                                <tr>
+                                    <td>
+                                        <div class="user-info">
+                                            <div class="user-avatar">{{ user.first_name|first|upper }}</div>
+                                            <div class="user-details">
+                                                <span class="user-name">{{ user.first_name }} {{ user.last_name }}</span>
+                                                <span class="user-email">{{ user.email_id }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>₹{{ user.total_expenses|floatformat:0 }}</td>
+                                    <td>{{ user.expense_count }}</td>
+                                    <td>₹{{ user.avg_per_transaction|floatformat:0 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-filters">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="expenses">Expenses</button>
+                            <button class="filter-btn" data-filter="income">Income</button>
+                            <button class="filter-btn" data-filter="bills">Bills</button>
+                        </div>
+                    </div>
+                    <div class="activity-list">
+                        {% for expense in recent_expenses %}
+                        <div class="activity-item expense">
+                            <div class="activity-icon">
+                                <i class="bi bi-cart-dash"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">{{ expense.user.first_name }} added expense</div>
+                                <div class="activity-details">
+                                    <span class="amount">₹{{ expense.amount }}</span>
+                                    <span class="category">{{ expense.category }}</span>
+                                    <span class="date">{{ expense.date|date:"M d, Y" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        {% for income in recent_income %}
+                        <div class="activity-item income">
+                            <div class="activity-icon">
+                                <i class="bi bi-cash-stack"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">{{ income.user.first_name }} added income</div>
+                                <div class="activity-details">
+                                    <span class="amount">₹{{ income.amount }}</span>
+                                    <span class="category">{{ income.source }}</span>
+                                    <span class="date">{{ income.date|date:"M d, Y" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-row">
+                <!-- Bill Statistics -->
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>Bill Management</h3>
+                        <div class="bill-stats">
+                            <span class="stat-item">
+                                <span class="stat-number">{{ bill_categories|length }}</span>
+                                <span class="stat-label">Categories</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="bill-categories">
+                        {% for category in bill_categories %}
+                        <div class="bill-category">
+                            <div class="category-header">
+                                <span class="category-name">{{ category.category }}</span>
+                                <span class="category-amount">₹{{ category.total|floatformat:0 }}</span>
+                            </div>
+                            <div class="category-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" data-width="{{ category.percent_paid|default_if_none:'0' }}"></div>
+                                    </div>
+                                    <span class="progress-text">{{ category.paid_count }}/{{ category.count }} paid</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Feedback Summary -->
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>User Feedback Summary</h3>
+                        <div class="rating-overview">
+                            <div class="avg-rating">
+                                <span class="rating-number">{{ avg_rating }}</span>
+                                <div class="rating-stars">
+                                    {% for i in "12345" %}
+                                    <i class="bi bi-star{% if forloop.counter <= avg_rating %}-fill{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feedback-summary">
+                        <div class="feedback-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">{{ total_feedback }}</span>
+                                <span class="stat-label">Total Reviews</span>
+                            </div>
+                        </div>
+                        <div class="rating-breakdown">
+                            {% for rating in rating_distribution %}
+                            <div class="rating-bar">
+                                <span class="rating-label">{{ rating.rating }} Stars</span>
+                                <div class="rating-progress">
+                                    <div class="progress-fill" data-width="{% if total_feedback %}{% widthratio rating.count total_feedback 100 %}{% else %}0{% endif %}"></div>
+                                </div>
+                                <span class="rating-count">{{ rating.count }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Actions</h2>
+        <div class="actions-section">
+            <div class="action-buttons">
+                <button class="btn-export" onclick="exportReport('pdf')">
+                    <i class="bi bi-file-pdf"></i>
+                    Export PDF
+                </button>
+                <button class="btn-export" onclick="exportReport('excel')">
+                    <i class="bi bi-file-earmark-excel"></i>
+                    Export Excel
+                </button>
+                <button class="btn-export" onclick="exportReport('csv')">
+                    <i class="bi bi-file-text"></i>
+                    Export CSV
+                </button>
+                <button class="btn-refresh" onclick="refreshReports()">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Refresh Data
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Reports Container */
+    .reports-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* Header Section */
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .title-section h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .title-section h1 i {
+        color: var(--primary-color);
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+
+    .breadcrumb-item.active {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    /* Metrics Overview */
+    .metrics-overview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .metric-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .metric-icon {
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .metric-icon.users { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .metric-icon.income { background: linear-gradient(135deg, #10b981, #059669); }
+    .metric-icon.expenses { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .metric-icon.bills { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+    .metric-content h3 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .metric-content p {
+        color: var(--text-secondary);
+        margin: 0.25rem 0;
+        font-weight: 600;
+    }
+
+    .metric-content small {
+        color: var(--success-color);
+        font-weight: 500;
+    }
+
+    /* Charts Section */
+    .charts-section {
+        margin-bottom: 3rem;
+    }
+
+    .chart-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .chart-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .chart-header h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .chart-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-chart {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border-color);
+        background: white;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-chart.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .chart-container {
+        height: 300px;
+        position: relative;
+    }
+
+    /* Analytics Section */
+    .analytics-section {
+        margin-bottom: 3rem;
+    }
+
+    .analytics-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .analytics-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .card-header h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .btn-view-all {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    /* Table Styles */
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .analytics-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .analytics-table th,
+    .analytics-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .analytics-table th {
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .user-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .user-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .user-email {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    /* Activity List */
+    .activity-filters {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border-color);
+        background: white;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .activity-list {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1rem;
+    }
+
+    .activity-item.expense .activity-icon {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .activity-item.income .activity-icon {
+        background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-title {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .activity-details {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    .amount {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    /* Bill Categories */
+    .bill-stats {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-number {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--primary-color);
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    .bill-categories {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .bill-category {
+        padding: 1rem;
+        background: var(--light-bg);
+        border-radius: 0.75rem;
+    }
+
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .category-name {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .category-amount {
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    .category-progress {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .progress-bar {
+        flex: 1;
+        height: 0.5rem;
+        background: var(--border-color);
+        border-radius: 0.25rem;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(135deg, var(--success-color), var(--primary-color));
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        min-width: 80px;
+    }
+
+    /* Feedback Summary */
+    .rating-overview {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .avg-rating {
+        text-align: center;
+    }
+
+    .rating-number {
+        display: block;
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary-color);
+    }
+
+    .rating-stars {
+        color: #fbbf24;
+        font-size: 1.25rem;
+    }
+
+    .feedback-summary {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .feedback-stats {
+        display: flex;
+        justify-content: center;
+    }
+
+    .rating-breakdown {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .rating-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .rating-label {
+        min-width: 80px;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    .rating-progress {
+        flex: 1;
+        height: 0.5rem;
+        background: var(--border-color);
+        border-radius: 0.25rem;
+        overflow: hidden;
+    }
+
+    .rating-count {
+        min-width: 40px;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        text-align: right;
+    }
+
+    /* Actions Section */
+    .actions-section {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn-export,
+    .btn-refresh {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-export {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+    }
+
+    .btn-refresh {
+        background: linear-gradient(135deg, var(--success-color), var(--success-dark));
+        color: white;
+    }
+
+    .btn-export:hover,
+    .btn-refresh:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .reports-container {
+            padding: 1rem;
+        }
+
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .title-section h1 {
+            font-size: 2rem;
+        }
+
+        .chart-row {
+            grid-template-columns: 1fr;
+        }
+
+        .analytics-row {
+            grid-template-columns: 1fr;
+        }
+
+        .metrics-overview {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin: 2.5rem 0 1.5rem 0;
+        letter-spacing: 0.02em;
+    }
+    /* Sticky table headers and alternating row colors */
+    .analytics-table th {
+        position: sticky;
+        top: 0;
+        background: #f8fafc;
+        z-index: 2;
+    }
+    .analytics-table tbody tr:nth-child(even) {
+        background: #f3f4f6;
+    }
+    .analytics-table tbody tr:nth-child(odd) {
+        background: #fff;
+    }
+    /* Center actions section */
+    .actions-section {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    /* Responsive 2x2 grid for charts */
+    .charts-section .chart-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    @media (max-width: 900px) {
+        .charts-section .chart-row {
+            grid-template-columns: 1fr;
+        }
+    }
+    /* Add extra spacing between major sections */
+    .metrics-overview, .charts-section, .analytics-section, .actions-section {
+        margin-bottom: 3rem;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="chart-data" type="application/json">
+  {{ chart_data|safe }}
+</script>
+<script>
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.color = '#64748b';
+
+    // Parse chart data from Django context
+    const chartData = JSON.parse(document.getElementById('chart-data').textContent);
+
+    // Set progress bar widths from data-width attributes
+    document.querySelectorAll('.progress-fill').forEach(el => {
+      el.style.width = (el.dataset.width || '0') + '%';
+    });
+
+    // Monthly Trends Chart
+    const trendsCtx = document.getElementById('monthlyTrendsChart').getContext('2d');
+    const trendsChart = new Chart(trendsCtx, {
+        type: 'line',
+        data: {
+            labels: chartData.monthly_income.map(item => new Date(item.month).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })),
+            datasets: [{
+                label: 'Income',
+                data: chartData.monthly_income.map(item => item.total),
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Expenses',
+                data: chartData.monthly_expenses.map(item => item.total),
+                borderColor: '#f59e0b',
+                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Expense Categories Chart
+    const expenseCtx = document.getElementById('expenseCategoriesChart').getContext('2d');
+    const expenseChart = new Chart(expenseCtx, {
+        type: 'doughnut',
+        data: {
+            labels: chartData.expense_categories.map(item => item.category),
+            datasets: [{
+                data: chartData.expense_categories.map(item => item.total),
+                backgroundColor: [
+                    '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+                    '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#6366f1'
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ₹' + context.parsed.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Income Sources Chart
+    const incomeCtx = document.getElementById('incomeSourcesChart').getContext('2d');
+    const incomeChart = new Chart(incomeCtx, {
+        type: 'doughnut',
+        data: {
+            labels: chartData.income_sources.map(item => item.source || 'Unknown'),
+            datasets: [{
+                data: chartData.income_sources.map(item => item.total),
+                backgroundColor: [
+                    '#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ef4444',
+                    '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#6366f1'
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': ₹' + context.parsed.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Rating Distribution Chart
+    const ratingCtx = document.getElementById('ratingDistributionChart').getContext('2d');
+    const ratingChart = new Chart(ratingCtx, {
+        type: 'bar',
+        data: {
+            labels: chartData.rating_distribution.map(item => item.rating + ' Stars'),
+            datasets: [{
+                label: 'Number of Reviews',
+                data: chartData.rating_distribution.map(item => item.count),
+                backgroundColor: [
+                    '#ef4444', '#f59e0b', '#eab308', '#84cc16', '#10b981'
+                ],
+                borderRadius: 8,
+                borderSkipped: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+
+    // Chart type switching
+    document.querySelectorAll('.btn-chart').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const chartType = this.dataset.chart;
+            const chartContainer = this.closest('.chart-card');
+            
+            // Update active button
+            chartContainer.querySelectorAll('.btn-chart').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Here you would switch chart types
+            console.log('Switching to:', chartType);
+        });
+    });
+
+    // Activity filtering
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            const activityList = this.closest('.analytics-card').querySelector('.activity-list');
+            
+            // Update active button
+            this.closest('.activity-filters').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter activities
+            activityList.querySelectorAll('.activity-item').forEach(item => {
+                if (filter === 'all' || item.classList.contains(filter)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Export functions
+    function exportReport(format) {
+        console.log('Exporting report as:', format);
+        // Implementation for export functionality
+        alert(`Exporting report as ${format.toUpperCase()}...`);
+    }
+
+    function refreshReports() {
+        console.log('Refreshing reports...');
+        location.reload();
+    }
+
+    // Smooth animations
+    document.addEventListener('DOMContentLoaded', function() {
+        const elements = document.querySelectorAll('.metric-card, .chart-card, .analytics-card');
+        elements.forEach((element, index) => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                element.style.transition = 'all 0.6s ease';
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    });
+</script>
+{% endblock %} 

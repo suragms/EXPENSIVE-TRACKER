@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download User Data | Expense Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 3rem auto;
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 2.5rem 2rem;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        p {
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .checkbox-label {
+            font-size: 1rem;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .download-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.9rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 1rem;
+        }
+        .download-btn:hover {
+            background: #2563eb;
+        }
+        .back-link {
+            display: block;
+            margin: 1.5rem auto 0 auto;
+            text-align: center;
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-file-export"></i> Export Your Data</h1>
+        <p>You can export your personal data from Expense Tracker. Select the data you want to export and click the button below. Your data will be downloaded as a CSV file.</p>
+        <form method="POST" action="/download_user_data/">
+            {% csrf_token %}
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="export_profile" checked disabled>
+                    <i class="fas fa-user"></i> Profile Information (always included)
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="export_expenses">
+                    <i class="fas fa-receipt"></i> Expenses
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="export_income">
+                    <i class="fas fa-coins"></i> Income
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="export_feedback">
+                    <i class="fas fa-comments"></i> Feedback
+                </label>
+            </div>
+            <button type="submit" class="download-btn">
+                <i class="fas fa-download"></i> Download Selected Data
+            </button>
+        </form>
+        <a href="/userprofile/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Profile</a>
+    </div>
+</body>
+</html> 
