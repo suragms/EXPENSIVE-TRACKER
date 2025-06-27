@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+*.pyo
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+
+# Virtual environment
+env/
+venv/
+myvenv/
+
+# VS Code
+.vscode/
+
+# macOS & Windows system files
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
