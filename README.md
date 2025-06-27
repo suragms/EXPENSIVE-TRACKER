@@ -142,7 +142,7 @@ expense-tracker/
 
 ## 👤 Author
 
-**Surag Sunil**  
+**Surag**  
 🎓 MCA Student | 🖥️ Python Django Developer  
 🔗 [GitHub](http://github.com/suragms) | [LinkedIn](https://linkedin.com/in/suragsunil) | [Instagram](https://instagram.com/surag_sunil)
 
