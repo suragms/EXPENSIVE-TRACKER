@@ -8,4 +8,4 @@ services:
       - key: DJANGO_SETTINGS_MODULE
         value: Expensive_tracker.settings
       - key: PYTHON_VERSION
-        value: 3.11.8  # ✅ complete Python version
+        value: 3.11.8  # ✅ full version
