@@ -7,18 +7,35 @@ from django.contrib import messages
 import smtplib
 import this
 import razorpay
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest
 import csv
+import json
 razorpay_client = razorpay.Client(
  auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 # Create your views here.
 def index(request):
-    return render(request,'index.html')
+    # Get feedback data for testimonials
+    feedback_data = Feedback.objects.all().order_by('-created_at')[:10]  # Get latest 10 feedback
+    
+    # Get total feedback count and average rating from all feedback
+    total_feedback_count = Feedback.objects.count()
+    avg_rating = Feedback.objects.aggregate(Avg('rating'))['rating__avg'] or 0
+    
+    # Add username to each feedback object
+    for feedback in feedback_data:
+        feedback.username = feedback.email.split('@')[0] if '@' in feedback.email else feedback.email
+    
+    context = {
+        'feedback_data': feedback_data,
+        'avg_rating': round(avg_rating, 1),
+        'total_feedback': total_feedback_count
+    }
+    return render(request, 'index.html', context)
 
 # def settings(request):
     # return render(request,'settings.html')
@@ -110,13 +127,20 @@ def adminlogin(request):
 
 def feedback(request):
     if request.method == "POST":
-        feedback_text = request.POST.get('feedback_text')
+        feedback_text = request.POST.get('feedback_text', '').strip()
         rating = request.POST.get('rating')
-        email = request.POST.get('email')  # Get the email field
+        email = request.POST.get('email', '').strip()
 
         # Check for missing fields
         if not feedback_text or not rating or not email:
-            alert_message = "<script>alert('Please fill in all required fields.'); window.location.href='/feedback_rate';</script>"
+            alert_message = "<script>alert('Please fill in all required fields (email, feedback text, and rating).'); window.location.href='/feedback_rate';</script>"
+            return HttpResponse(alert_message)
+
+        # Validate email format
+        import re
+        email_pattern = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
+        if not re.match(email_pattern, email):
+            alert_message = "<script>alert('Please enter a valid email address.'); window.location.href='/feedback_rate';</script>"
             return HttpResponse(alert_message)
 
         try:
@@ -124,20 +148,25 @@ def feedback(request):
             if rating not in [1, 2, 3, 4, 5]:
                 raise ValueError("Invalid rating value")
         except (ValueError, TypeError):
-            alert_message = "<script>alert('Invalid rating value. Please select a valid rating.'); window.location.href='/feedback_rate';</script>"
+            alert_message = "<script>alert('Invalid rating value. Please select a valid rating between 1 and 5.'); window.location.href='/feedback_rate';</script>"
             return HttpResponse(alert_message)
 
-        # Create and save the Feedback instance
-        feedback_instance = Feedback(
-            feedback_text=feedback_text,
-            rating=rating,
-            email=email  # Save the email
-        )
-        feedback_instance.save()
+        try:
+            # Create and save the Feedback instance
+            feedback_instance = Feedback(
+                feedback_text=feedback_text,
+                rating=rating,
+                email=email
+            )
+            feedback_instance.save()
 
-        # Show a success message with JavaScript and reload the form
-        success_message = "<script>alert('Feedback submitted successfully! Thank you for using our website! We'd post your valuable feedback and suggestions'); window.location.href='/feedback_rate';</script>"
-        return HttpResponse(success_message)
+            # Show a success message with JavaScript and reload the form
+            success_message = "<script>alert('Feedback submitted successfully! Thank you for your valuable feedback.'); window.location.href='/feedback_rate';</script>"
+            return HttpResponse(success_message)
+        except Exception as e:
+            # Handle any database errors
+            alert_message = f"<script>alert('An error occurred while saving your feedback. Please try again.'); window.location.href='/feedback_rate';</script>"
+            return HttpResponse(alert_message)
 
     # Render the feedback form for GET requests
     return render(request, 'feedback_rate.html')
@@ -907,6 +936,11 @@ def convert_decimal(obj):
         return {k: convert_decimal(v) for k, v in obj.items()}
     elif isinstance(obj, Decimal):
         return float(obj)
+    elif isinstance(obj, (date, datetime)):
+        return obj.isoformat()
+    elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
+        # Handle QuerySet and other iterable objects
+        return [convert_decimal(i) for i in obj]
     return obj
 
 def export_user_data(request):

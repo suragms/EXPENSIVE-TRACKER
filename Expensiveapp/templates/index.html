@@ -763,68 +763,91 @@
             background: linear-gradient(135deg, rgba(74, 107, 255, 0.03), rgba(108, 71, 255, 0.03));
         }
 
-        .testimonials-slider {
+        .testimonials-container {
+            position: relative;
             max-width: 1000px;
             margin: 0 auto;
         }
 
-        .testimonial-item {
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
             background: var(--white);
             border-radius: var(--border-radius);
-            padding: 40px;
+            padding: 30px;
             box-shadow: var(--card-shadow);
-            margin: 15px;
+            transition: var(--transition);
             position: relative;
         }
 
-        .testimonial-item::before {
-            content: '\201C';
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            font-size: 5rem;
-            color: rgba(74, 107, 255, 0.1);
-            font-family: serif;
-            line-height: 1;
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(74, 107, 255, 0.15);
         }
 
-        .testimonial-content {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 30px;
-            font-style: italic;
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .user-details h4 {
+            margin-bottom: 5px;
+            color: var(--dark-color);
             font-size: 1.1rem;
         }
 
-        .testimonial-author {
+        .rating-display {
             display: flex;
             align-items: center;
+            gap: 5px;
         }
 
-        .author-img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 20px;
-            flex-shrink: 0;
-            border: 3px solid rgba(74, 107, 255, 0.1);
-        }
-
-        .author-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .author-info h4 {
-            margin-bottom: 5px;
-            color: var(--dark-color);
-        }
-
-        .author-info p {
+        .rating-text {
             font-size: 0.9rem;
             color: var(--text-light);
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .feedback-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .testimonial-content p {
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 1rem;
+            margin: 0;
         }
 
         /* CTA Section */
@@ -1145,7 +1168,7 @@
                 display: none;
             }
 
-            .testimonial-item {
+            .testimonial-card {
                 padding: 30px 20px;
             }
 
@@ -1208,6 +1231,422 @@
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--secondary-color);
+        }
+
+        /* Fallback for when JavaScript is disabled */
+        .testimonials-slider.no-js {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .testimonials-slider.no-js .testimonial-item {
+            min-width: calc(33.333% - 30px);
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .testimonials-slider.no-js .testimonial-item {
+                min-width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .testimonials-slider.no-js .testimonial-item {
+                min-width: 100%;
+            }
+        }
+
+        /* Testimonials Grid Layout */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(74, 107, 255, 0.15);
+        }
+
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .user-details h4 {
+            margin-bottom: 5px;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .rating-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .feedback-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .testimonial-content p {
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* Responsive adjustments for testimonials grid */
+        @media (max-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .testimonial-card {
+                padding: 25px;
+            }
+
+            .testimonial-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+
+        /* Animated Testimonials Slider */
+        .testimonials-slider-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 0 60px;
+        }
+
+        .testimonials-slider {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width: 100%;
+        }
+
+        .testimonial-slide {
+            min-width: 100%;
+            flex-shrink: 0;
+            opacity: 0.7;
+            transform: scale(0.9);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .testimonial-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .testimonial-slide .testimonial-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-slide .testimonial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(74, 107, 255, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .testimonial-slide.active .testimonial-card::before {
+            left: 100%;
+        }
+
+        /* Star Animation */
+        .star-animated {
+            animation: starPop 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .star-animated:nth-child(1) { animation-delay: 0.1s; }
+        .star-animated:nth-child(2) { animation-delay: 0.2s; }
+        .star-animated:nth-child(3) { animation-delay: 0.3s; }
+        .star-animated:nth-child(4) { animation-delay: 0.4s; }
+        .star-animated:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes starPop {
+            0% {
+                transform: scale(0) rotate(180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(90deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Navigation Arrows */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: var(--white);
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 5px 20px rgba(74, 107, 255, 0.2);
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-nav:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 8px 25px rgba(74, 107, 255, 0.3);
+        }
+
+        .slider-nav:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .slider-nav.prev {
+            left: 0;
+        }
+
+        .slider-nav.next {
+            right: 0;
+        }
+
+        .slider-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(0.8);
+        }
+
+        .slider-nav:disabled:hover {
+            background: var(--white);
+            color: var(--primary-color);
+            transform: translateY(-50%) scale(0.8);
+        }
+
+        /* Dots Navigation */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(74, 107, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .dot:hover {
+            background: rgba(74, 107, 255, 0.5);
+            transform: scale(1.2);
+        }
+
+        .dot.active {
+            background: var(--primary-color);
+            transform: scale(1.3);
+        }
+
+        .dot.active::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Slide Transition Animations */
+        .testimonial-slide {
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .testimonial-slide.slide-out {
+            animation: slideOut 0.6s ease-in;
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50px) scale(0.9);
+            }
+        }
+
+        /* User Avatar Animation */
+        .user-avatar {
+            animation: avatarGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes avatarGlow {
+            from {
+                box-shadow: 0 0 10px rgba(74, 107, 255, 0.3);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(74, 107, 255, 0.6);
+            }
+        }
+
+        /* Rating Display Animation */
+        .rating-display {
+            animation: ratingSlide 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes ratingSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Content Animation */
+        .testimonial-content {
+            animation: contentFade 0.8s ease-out 0.5s both;
+        }
+
+        @keyframes contentFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adjustments for slider */
+        @media (max-width: 768px) {
+            .testimonials-slider-container {
+                padding: 0 40px;
+            }
+
+            .slider-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .testimonial-slide .testimonial-card {
+                padding: 30px 20px;
+            }
+
+            .slider-dots {
+                margin-top: 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .testimonials-slider-container {
+                padding: 0 30px;
+            }
+
+            .slider-nav {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .testimonial-slide .testimonial-card {
+                padding: 25px 15px;
+            }
         }
     </style>
 </head>
@@ -1434,7 +1873,7 @@
         <div class="videos-grid">
             <div class="video-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="video-thumbnail">
-                    <<iframe width="560" height="315" src="https://www.youtube.com/embed/NZ6bye9uSV8?si=eBaBmmv9bTxO7j6l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/NZ6bye9uSV8?si=eBaBmmv9bTxO7j6l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     <div class="play-btn"><i class="bi bi-play-fill"></i></div>
                 </div>
                 <div class="video-content">
@@ -1471,48 +1910,155 @@
             <h2>What Our Users Say</h2>
             <p>Hear from people who transformed their financial lives</p>
         </div>
-        <div class="testimonials-slider" data-aos="fade-up">
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <p>Expense Tracker completely changed how I manage my money. I was able to save 30% more in just three months by identifying unnecessary expenses I didn't even realize I had.</p>
+        
+        <!-- Feedback Stats -->
+        {% if feedback_data %}
+        <div class="feedback-stats" style="text-align: center; margin-bottom: 50px;">
+            <div style="display: inline-flex; align-items: center; gap: 20px; background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+                <div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #fbbf24;">{{ avg_rating }}</div>
+                    <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">Average Rating</div>
                 </div>
-                <div class="testimonial-author">
-                    <div class="author-img">
-                        <img src="{% static 'img/user1.jpg' %}" alt="Sarah Johnson">
-                    </div>
-                    <div class="author-info">
-                        <h4>Sarah Johnson</h4>
-                        <p>Marketing Manager</p>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <p>As a freelancer, keeping track of my irregular income and expenses was a nightmare. Expense Tracker made it simple and even helped me plan for taxes better.</p>
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-img">
-                        <img src="{% static 'img/user2.jpg' %}" alt="David Chen">
-                    </div>
-                    <div class="author-info">
-                        <h4>David Chen</h4>
-                        <p>Freelance Designer</p>
-                    </div>
+                <div style="width: 1px; height: 40px; background: rgba(255, 255, 255, 0.2);"></div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #4a6bff;">{{ total_feedback }}</div>
+                    <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">Total Reviews</div>
                 </div>
             </div>
-            <div class="testimonial-item">
-                <div class="testimonial-content">
-                    <p>The budgeting features helped my family get out of debt faster than we imagined. The visual reports made it easy to see where we could cut back without feeling deprived.</p>
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-img">
-                        <img src="{% static 'img/user3.jpg' %}" alt="The Rodriguez Family">
+        </div>
+        {% endif %}
+        
+        <div class="testimonials-slider-container">
+            <div class="testimonials-slider" id="testimonialsSlider">
+                {% if feedback_data %}
+                    {% for feedback in feedback_data %}
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="100">
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        {{ feedback.username|first|upper }}
+                                    </div>
+                                    <div class="user-details">
+                                        <h4>{{ feedback.username }}</h4>
+                                        <div class="rating-display">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= feedback.rating %}
+                                                    <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                                {% else %}
+                                                    <i class="bi bi-star" style="color: #e2e8f0; font-size: 1.1rem;"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <span class="rating-text">{{ feedback.rating }}/5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feedback-date">
+                                    {{ feedback.created_at|date:"M d, Y" }}
+                                </div>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>{{ feedback.feedback_text }}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="author-info">
-                        <h4>The Rodriguez Family</h4>
-                        <p>Happy Users</p>
+                    {% endfor %}
+                {% else %}
+                    <!-- Fallback testimonials if no feedback data -->
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="100">
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="user-info">
+                                    <div class="user-avatar">S</div>
+                                    <div class="user-details">
+                                        <h4>Sarah Johnson</h4>
+                                        <div class="rating-display">
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <span class="rating-text">5/5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feedback-date">May 15, 2024</div>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>Expense Tracker completely changed how I manage my money. I was able to save 30% more in just three months by identifying unnecessary expenses I didn't even realize I had.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="200">
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="user-info">
+                                    <div class="user-avatar">D</div>
+                                    <div class="user-details">
+                                        <h4>David Chen</h4>
+                                        <div class="rating-display">
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star" style="color: #e2e8f0; font-size: 1.1rem;"></i>
+                                            <span class="rating-text">4/5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feedback-date">June 2, 2024</div>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>As a freelancer, keeping track of my irregular income and expenses was a nightmare. Expense Tracker made it simple and even helped me plan for taxes better.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="300">
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="user-info">
+                                    <div class="user-avatar">R</div>
+                                    <div class="user-details">
+                                        <h4>The Rodriguez Family</h4>
+                                        <div class="rating-display">
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <span class="rating-text">5/5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feedback-date">June 10, 2024</div>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>The budgeting features helped my family get out of debt faster than we imagined. The visual reports made it easy to see where we could cut back without feeling deprived.</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Navigation Arrows -->
+            <button class="slider-nav prev" id="prevBtn" aria-label="Previous testimonial">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="slider-nav next" id="nextBtn" aria-label="Next testimonial">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+            
+            <!-- Dots Navigation -->
+            <div class="slider-dots" id="sliderDots">
+                {% if feedback_data %}
+                    {% for feedback in feedback_data %}
+                        <button class="dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></button>
+                    {% endfor %}
+                {% else %}
+                    <button class="dot active" data-slide="0"></button>
+                    <button class="dot" data-slide="1"></button>
+                    <button class="dot" data-slide="2"></button>
+                {% endif %}
             </div>
         </div>
     </section>
@@ -1659,24 +2205,223 @@
             closeButton: true
         });
 
-        // Testimonials slider
-        let currentTestimonial = 0;
-        const testimonials = document.querySelectorAll('.testimonial-item');
-
-        function showTestimonial(index) {
-            testimonials.forEach((testimonial, i) => {
-                testimonial.style.display = i === index ? 'block' : 'none';
+        // Testimonials slider functionality
+        const slider = document.getElementById('testimonialsSlider');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        const slides = document.querySelectorAll('.testimonial-slide');
+        
+        console.log('Slider elements found:', {
+            slider: !!slider,
+            prevBtn: !!prevBtn,
+            nextBtn: !!nextBtn,
+            dotsCount: dots.length,
+            slidesCount: slides.length
+        });
+        
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        
+        // Initialize slider
+        function initSlider() {
+            console.log('Initializing slider with', totalSlides, 'slides');
+            
+            // Remove fallback class if JavaScript is working
+            if (slider) {
+                slider.classList.remove('no-js');
+            }
+            
+            if (totalSlides <= 1) {
+                console.log('Only one slide, hiding navigation');
+                // Hide navigation if only one slide
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                const dotsContainer = document.querySelector('.slider-dots');
+                if (dotsContainer) dotsContainer.style.display = 'none';
+                return;
+            }
+            
+            updateSlider();
+        }
+        
+        // Update slider position and navigation states
+        function updateSlider() {
+            console.log('Updating slider to slide', currentSlide);
+            
+            // Move slider to current slide
+            if (slider) {
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+            
+            // Update slides active state
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+            
+            // Update navigation buttons
+            if (prevBtn) prevBtn.disabled = currentSlide === 0;
+            if (nextBtn) nextBtn.disabled = currentSlide === totalSlides - 1;
+            
+            // Trigger star animations for current slide
+            animateStars(currentSlide);
+        }
+        
+        // Animate stars for the current slide
+        function animateStars(slideIndex) {
+            const currentSlideElement = slides[slideIndex];
+            if (!currentSlideElement) return;
+            
+            const stars = currentSlideElement.querySelectorAll('.star-animated');
+            stars.forEach((star, index) => {
+                // Reset animation
+                star.style.animation = 'none';
+                void star.offsetWidth; // Trigger reflow
+                
+                // Restart animation with delay
+                star.style.animation = `starPop 0.6s ease-out ${index * 0.1}s both`;
             });
         }
-
-        function nextTestimonial() {
-            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
-            showTestimonial(currentTestimonial);
+        
+        // Go to specific slide with animation
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides && index !== currentSlide) {
+                // Add slide-out animation to current slide
+                slides[currentSlide].classList.add('slide-out');
+                
+                setTimeout(() => {
+                    currentSlide = index;
+                    updateSlider();
+                    
+                    // Remove slide-out class and add slide-in animation
+                    slides.forEach(slide => slide.classList.remove('slide-out'));
+                    slides[currentSlide].classList.add('slide-in');
+                    
+                    setTimeout(() => {
+                        slides[currentSlide].classList.remove('slide-in');
+                    }, 800);
+                }, 300);
+            }
         }
+        
+        // Next slide with animation
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+        
+        // Previous slide with animation
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+        
+        // Event listeners
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+            console.log('Navigation buttons event listeners added');
+        }
+        
+        // Dot navigation
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => goToSlide(index));
+        });
+        console.log('Dot navigation event listeners added');
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+            }
+        });
+        
+        // Auto-play functionality with enhanced timing
+        let autoPlayInterval;
+        
+        function startAutoPlay() {
+            if (totalSlides > 1) {
+                autoPlayInterval = setInterval(() => {
+                    if (currentSlide < totalSlides - 1) {
+                        nextSlide();
+                    } else {
+                        goToSlide(0); // Reset to first slide
+                    }
+                }, 6000); // Change slide every 6 seconds
+                console.log('Auto-play started');
+            }
+        }
+        
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+        
+        // Pause auto-play on hover
+        const testimonialsContainer = document.querySelector('.testimonials-slider-container');
+        if (testimonialsContainer) {
+            testimonialsContainer.addEventListener('mouseenter', stopAutoPlay);
+            testimonialsContainer.addEventListener('mouseleave', startAutoPlay);
+        }
+        
+        // Initialize slider when DOM is loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSlider);
+        } else {
+            // Small delay to ensure all elements are rendered
+            setTimeout(initSlider, 100);
+        }
+        
+        // Start auto-play after a delay
+        setTimeout(startAutoPlay, 1000);
 
-        // Auto-rotate testimonials every 5 seconds
-        showTestimonial(0);
-        setInterval(nextTestimonial, 5000);
+        // Touch/Swipe support for mobile devices with enhanced sensitivity
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+        
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }
+        
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }
+        
+        function handleSwipe() {
+            const swipeThreshold = 30; // Reduced threshold for better sensitivity
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            
+            // Only trigger if horizontal swipe is more significant than vertical
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
+                if (diffX > 0) {
+                    // Swipe left - next slide
+                    nextSlide();
+                } else {
+                    // Swipe right - previous slide
+                    prevSlide();
+                }
+            }
+        }
+        
+        // Add touch event listeners to slider
+        if (slider) {
+            slider.addEventListener('touchstart', handleTouchStart, { passive: true });
+            slider.addEventListener('touchend', handleTouchEnd, { passive: true });
+        }
 
         // Logo animation on hover
         const logo = document.querySelector('.logo');
