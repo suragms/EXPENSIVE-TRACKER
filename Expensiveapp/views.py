@@ -19,12 +19,18 @@ razorpay_client = razorpay.Client(
 
 # Create your views here.
 def index(request):
-    # Get feedback data for testimonials
-    feedback_data = Feedback.objects.all().order_by('-created_at')[:10]  # Get latest 10 feedback
-    
-    # Get total feedback count and average rating from all feedback
-    total_feedback_count = Feedback.objects.count()
-    avg_rating = Feedback.objects.aggregate(Avg('rating'))['rating__avg'] or 0
+    # Get feedback data for testimonials with error handling
+    try:
+        feedback_data = Feedback.objects.all().order_by('-created_at')[:10]  # Get latest 10 feedback
+        
+        # Get total feedback count and average rating from all feedback
+        total_feedback_count = Feedback.objects.count()
+        avg_rating = Feedback.objects.aggregate(Avg('rating'))['rating__avg'] or 0
+    except Exception as e:
+        # Handle case where Feedback table doesn't exist yet
+        feedback_data = []
+        total_feedback_count = 0
+        avg_rating = 0
     
     # Add username to each feedback object
     for feedback in feedback_data:
