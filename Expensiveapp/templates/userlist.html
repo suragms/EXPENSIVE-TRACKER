@@ -1,0 +1,691 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+<style>
+    /* User Management Specific Styles */
+    .user-management-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .user-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 2.5rem;
+        border-radius: 1.5rem 1.5rem 0 0;
+        margin-bottom: 0;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .user-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        pointer-events: none;
+    }
+
+    .user-header h2 {
+        margin: 0;
+        font-weight: 800;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .user-header .header-icon {
+        font-size: 2.2rem;
+        opacity: 0.9;
+    }
+
+    .user-header p {
+        margin: 0.75rem 0 0;
+        opacity: 0.9;
+        font-size: 1.1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .user-content {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 0 0 1.5rem 1.5rem;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .user-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .user-stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .user-stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        pointer-events: none;
+    }
+
+    .user-stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+    }
+
+    .user-stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .user-stat-label {
+        font-size: 1rem;
+        opacity: 0.9;
+        font-weight: 600;
+        position: relative;
+        z-index: 1;
+    }
+
+    .user-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .search-section {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex: 1;
+        max-width: 500px;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 0.875rem 1.25rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.75rem;
+        font-size: 0.95rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .btn-refresh {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        color: white;
+        border: none;
+        padding: 0.875rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-refresh:hover {
+        background: linear-gradient(135deg, #2980b9 0%, #1f5f8b 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-add-user {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        padding: 0.875rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-add-user:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .user-table-container {
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e2e8f0;
+    }
+
+    .user-table-responsive {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .user-table {
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+    }
+
+    .user-table thead th {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        font-weight: 700;
+        padding: 1.25rem 1rem;
+        border: none;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .user-table tbody tr {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .user-table tbody tr:hover {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-table tbody td {
+        padding: 1.25rem 1rem;
+        vertical-align: middle;
+        border: none;
+        color: #1e293b;
+        font-weight: 500;
+    }
+
+    .user-name {
+        font-weight: 700;
+        color: #1e293b;
+    }
+
+    .user-email {
+        color: #3b82f6;
+        font-weight: 600;
+    }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .user-avatar:hover {
+        transform: scale(1.1);
+        border-color: #667eea;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .no-image-placeholder {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        border: 3px solid #e2e8f0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .no-image-placeholder:hover {
+        transform: scale(1.1);
+        border-color: #667eea;
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-delete:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        text-decoration: none;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #64748b;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 1rem;
+        margin: 2rem 0;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.5;
+        color: #94a3b8;
+    }
+
+    .empty-state h5 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #475569;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        color: #64748b;
+        margin-bottom: 2rem;
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .loading-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .user-header {
+            padding: 1.5rem;
+        }
+
+        .user-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .user-content {
+            padding: 1.5rem;
+        }
+
+        .user-stats-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .user-controls {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-section {
+            max-width: none;
+        }
+
+        .action-buttons {
+            justify-content: center;
+        }
+
+        .user-table-responsive {
+            max-height: 60vh;
+        }
+
+        .user-table thead th,
+        .user-table tbody td {
+            padding: 1rem 0.75rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .user-table thead th,
+        .user-table tbody td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .user-avatar,
+        .no-image-placeholder {
+            width: 40px;
+            height: 40px;
+        }
+    }
+</style>
+
+<div class="user-management-container">
+    <!-- User Management Header -->
+    <div class="user-header">
+        <h2>
+            <i class="bi bi-people-fill header-icon"></i>
+            User Management Dashboard
+        </h2>
+        <p>Comprehensive overview and management of all registered users in the system</p>
+    </div>
+
+    <!-- User Management Content -->
+    <div class="user-content">
+        <!-- User Statistics -->
+        <div class="user-stats-grid">
+            <div class="user-stat-card">
+                <div class="user-stat-number">{{ users|length }}</div>
+                <div class="user-stat-label">Total Users</div>
+            </div>
+            <div class="user-stat-card">
+                <div class="user-stat-number">{{ users|length }}</div>
+                <div class="user-stat-label">Active Users</div>
+            </div>
+            <div class="user-stat-card">
+                <div class="user-stat-number">0</div>
+                <div class="user-stat-label">New This Month</div>
+            </div>
+            <div class="user-stat-card">
+                <div class="user-stat-number">0</div>
+                <div class="user-stat-label">Premium Users</div>
+            </div>
+        </div>
+
+        <!-- User Controls -->
+        <div class="user-controls">
+            <div class="search-section">
+                <input type="text" 
+                       class="search-input" 
+                       placeholder="Search users by name or email..." 
+                       id="userSearch">
+                <button class="btn-refresh" onclick="refreshUsers()">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Refresh
+                </button>
+            </div>
+            <div class="action-buttons">
+                <a href="{% url 'add_user_admin' %}" class="btn-add-user">
+                    <i class="bi bi-person-plus"></i>
+                    Add User
+                </a>
+            </div>
+        </div>
+
+        <!-- User Table -->
+        <div class="user-table-container">
+            <div class="user-table-responsive">
+                {% if users %}
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <i class="bi bi-person"></i> First Name
+                            </th>
+                            <th>
+                                <i class="bi bi-person"></i> Last Name
+                            </th>
+                            <th>
+                                <i class="bi bi-envelope"></i> Email Address
+                            </th>
+                            <th>
+                                <i class="bi bi-image"></i> Profile Image
+                            </th>
+                            <th>
+                                <i class="bi bi-gear"></i> Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>
+                                <span class="user-name">{{ user.first_name|default:"N/A" }}</span>
+                            </td>
+                            <td>
+                                <span class="user-name">{{ user.last_name|default:"N/A" }}</span>
+                            </td>
+                            <td>
+                                <span class="user-email">{{ user.email_id|default:"N/A" }}</span>
+                            </td>
+                            <td>
+                                {% if user.image %}
+                                <img src="{{ user.image.url }}" 
+                                     alt="Profile Image" 
+                                     class="user-avatar"
+                                     title="{{ user.first_name }}'s profile image">
+                                {% else %}
+                                <div class="no-image-placeholder" title="No profile image">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn-delete" 
+                                        data-user-id="{{ user.id }}"
+                                        data-user-name="{{ user.first_name|default:user.email_id|escapejs }}"
+                                        title="Delete user">
+                                    <i class="bi bi-trash-fill"></i>
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-people"></i>
+                    <h5>No Users Found</h5>
+                    <p>There are currently no users registered in the system.</p>
+                    <a href="{% url 'add_user_admin' %}" class="btn-add-user">
+                        <i class="bi bi-person-plus"></i>
+                        Add First User
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<script>
+// Enhanced Search Functionality
+document.getElementById('userSearch').addEventListener('keyup', function() {
+    const searchTerm = this.value.toLowerCase();
+    const tableRows = document.querySelectorAll('tbody tr');
+    let visibleCount = 0;
+    
+    tableRows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+
+    // Update search results count
+    updateSearchResults(visibleCount);
+});
+
+// Update search results count
+function updateSearchResults(count) {
+    const totalUsers = document.querySelectorAll('tbody tr').length;
+    const searchInput = document.getElementById('userSearch');
+    
+    if (searchInput.value.trim() !== '') {
+        searchInput.placeholder = `Found ${count} of ${totalUsers} users...`;
+    } else {
+        searchInput.placeholder = 'Search users by name or email...';
+    }
+}
+
+// Enhanced Delete User Function
+function deleteUser(userId, userName) {
+    const confirmed = confirm(`Are you sure you want to delete user "${userName}"?\n\nThis action cannot be undone and will permanently remove the user from the system.`);
+    
+    if (confirmed) {
+        showLoading();
+        
+        // Simulate API call
+        setTimeout(() => {
+            window.location.href = `/delete_user/${userId}/`;
+        }, 1000);
+    }
+}
+
+// Enhanced Refresh Function
+function refreshUsers() {
+    showLoading();
+    setTimeout(() => {
+        window.location.reload();
+    }, 500);
+}
+
+// Show Add User Modal (placeholder)
+function showAddUserModal() {
+    window.location.href = "{% url 'add_user_admin' %}";
+}
+
+// Loading Functions
+function showLoading() {
+    document.getElementById('loadingOverlay').classList.add('show');
+}
+
+function hideLoading() {
+    document.getElementById('loadingOverlay').classList.remove('show');
+}
+
+// Enhanced page load animations
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate stats cards
+    const statCards = document.querySelectorAll('.user-stat-card');
+    statCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+
+    // Animate table rows
+    const tableRows = document.querySelectorAll('tbody tr');
+    tableRows.forEach((row, index) => {
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(-20px)';
+        setTimeout(() => {
+            row.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            row.style.opacity = '1';
+            row.style.transform = 'translateX(0)';
+        }, 500 + (index * 50));
+    });
+
+    // Add delete button event listeners
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const userId = this.getAttribute('data-user-id');
+            const userName = this.getAttribute('data-user-name');
+            deleteUser(userId, userName);
+        });
+    });
+});
+
+// Auto-hide loading after page load
+window.addEventListener('load', function() {
+    setTimeout(hideLoading, 1000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to Expense Tracker to manage your finances">
+    <title>Expense Tracker | Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Styling */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+        }
+
+        /* Galaxy Background */
+        .galaxy-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            animation: blink 1.5s infinite alternate;
+        }
+
+        .comet {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8));
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: cometFly 15s linear infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes cometFly {
+            0% {
+                transform: translateX(-100px) translateY(0) rotate(45deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw) translateY(100vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                        0 0 0 1px rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+            animation: fadeIn 0.6s ease-out, float 8s ease-in-out infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Logo & Header */
+        .logo-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .logo i {
+            font-size: 36px;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+
+        .logo-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-header p {
+            color: var(--gray);
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        /* Form Styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--light);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 15px 40px 15px 45px;
+            font-size: 16px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: var(--gray);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 18px;
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, var(--primary-dark), #1e40af);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Additional Options */
+        .additional-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .remember-me input {
+            accent-color: var(--primary);
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .forgot-password:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* Register Prompt Styling */
+        .register-prompt {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 15px;
+            color: var(--gray);
+        }
+
+        .register-prompt a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .register-prompt a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* Error Styling */
+        .error {
+            color: var(--error);
+            font-size: 14px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .error i {
+            font-size: 16px;
+        }
+
+        /* Message Styling */
+        .message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.5s ease;
+        }
+
+        .message.success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--error);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Homepage Button */
+        .homepage-btn-container {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            z-index: 10;
+        }
+
+        .homepage-btn {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(5px);
+            color: var(--light);
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .homepage-btn:hover {
+            background: rgba(37, 99, 235, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 25px;
+                max-width: 90%;
+            }
+            
+            .logo-header h1 {
+                font-size: 24px;
+            }
+            
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .logo i {
+                font-size: 32px;
+            }
+            
+            input[type="text"],
+            input[type="email"],
+            input[type="password"] {
+                padding: 13px 40px 13px 40px;
+                font-size: 15px;
+            }
+            
+            .btn {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .additional-options {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .homepage-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+            
+            .input-group i {
+                left: 12px;
+                font-size: 16px;
+            }
+            
+            .password-toggle {
+                right: 12px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="homepage-btn-container">
+        <a href="javascript:window.history.back();" class="homepage-btn" aria-label="Go back to previous page">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+    
+    <div class="galaxy-background">
+        <!-- Stars will be generated here -->
+    </div>
+    
+    <div class="container" role="main">
+        <div class="logo-header">
+            <div class="logo" aria-hidden="true">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h1>Expense Tracker</h1>
+            <p>Take control of your finances</p>
+        </div>
+        
+        <form method="POST" enctype="multipart/form-data" id="login-form" aria-labelledby="form-title">
+            {% csrf_token %}
+            
+            {% if msg %}
+            <div class="message {% if msg.type == 'success' %}success{% else %}error{% endif %}" role="alert">
+                <i class="fas fa-{% if msg.type == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+                {{ msg.text }}
+            </div>
+            {% endif %}
+            
+            <!-- Email Field -->
+            <div class="input-group">
+                <label for="email_id">Email</label>
+                <i class="fas fa-envelope" aria-hidden="true"></i>
+                <input 
+                    type="email" 
+                    name="email_id" 
+                    id="email_id" 
+                    placeholder="Enter your email" 
+                    required 
+                    aria-required="true"
+                    aria-describedby="email-error"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    title="Please enter a valid email address"
+                >
+                <div id="email-error" class="error" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Please enter a valid email address
+                </div>
+                {% if form.email_id.errors %}
+                    <div class="error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form.email_id.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Password Field -->
+            <div class="input-group">
+                <label for="password">Password</label>
+                <i class="fas fa-lock" aria-hidden="true"></i>
+                <input 
+                    type="password" 
+                    name="password" 
+                    id="password" 
+                    placeholder="Enter your password" 
+                    required 
+                    aria-required="true"
+                    aria-describedby="password-error"
+                    minlength="8"
+                    title="Password must be at least 8 characters long"
+                >
+                <i class="fas fa-eye password-toggle" id="password-toggle" aria-label="Toggle password visibility"></i>
+                <div id="password-error" class="error" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Password must be at least 8 characters long
+                </div>
+                {% if form.password.errors %}
+                    <div class="error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        {{ form.password.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Additional Options -->
+            <div class="additional-options">
+                <label class="remember-me">
+                    <input 
+                        type="checkbox" 
+                        name="remember" 
+                        id="remember-me"
+                        aria-label="Remember me"
+                    >
+                    Remember me
+                </label>
+                
+            </div>
+            
+            <!-- Submit Button -->
+            <button 
+                type="submit" 
+                class="btn btn-primary" 
+                aria-label="Login to your account"
+            >
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </form>
+        
+        <div class="register-prompt">
+            <p>Don't have an account? <a href="/user_register/" aria-label="Register for a new account">Register here</a></p>
+        </div>
+    </div>
+    
+    <script>
+        // Generate stars for galaxy background
+        const galaxyBackground = document.querySelector('.galaxy-background');
+        const numStars = 200;
+        const numComets = 3;
+        
+        for (let i = 0; i < numStars; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 2 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.top = `${Math.random() * 100}vh`;
+            star.style.animationDuration = `${Math.random() * 1 + 0.5}s`;
+            star.style.animationDelay = `${Math.random() * 2}s`;
+            galaxyBackground.appendChild(star);
+        }
+        
+        for (let i = 0; i < numComets; i++) {
+            const comet = document.createElement('div');
+            comet.className = 'comet';
+            comet.style.left = `${Math.random() * 20}vw`;
+            comet.style.top = `${Math.random() * 20}vh`;
+            comet.style.animationDelay = `${Math.random() * 5}s`;
+            galaxyBackground.appendChild(comet);
+        }
+        
+        // Input interaction effects
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Button hover effects
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Password toggle functionality
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('password-toggle');
+        
+        passwordToggle.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            passwordToggle.classList.toggle('fa-eye');
+            passwordToggle.classList.toggle('fa-eye-slash');
+        });
+
+        // Form validation
+        const loginForm = document.getElementById('login-form');
+        const emailInput = document.getElementById('email_id');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+
+        loginForm.addEventListener('submit', (e) => {
+            let isValid = true;
+
+            // Email validation
+            const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+            if (!emailPattern.test(emailInput.value)) {
+                emailError.style.display = 'flex';
+                isValid = false;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            // Password validation
+            if (passwordInput.value.length < 8) {
+                passwordError.style.display = 'flex';
+                isValid = false;
+            } else {
+                passwordError.style.display = 'none';
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+
+        // Keyboard accessibility
+        document.querySelectorAll('input, button, a').forEach(element => {
+            element.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && element.tagName !== 'BUTTON') {
+                    e.preventDefault();
+                    const form = element.closest('form');
+                    if (form) {
+                        form.querySelector('button[type="submit"]').click();
+                    }
+                }
+            });
+        });
+
+        // Auto-dismiss messages after 5 seconds
+        const messages = document.querySelectorAll('.message');
+        messages.forEach(message => {
+            setTimeout(() => {
+                message.style.opacity = '0';
+                setTimeout(() => message.remove(), 300);
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

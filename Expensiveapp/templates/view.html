@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Dashboard - View Options</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Professional Design System */
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #059669;
+            --success-dark: #047857;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-background);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .homepage-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .homepage-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .dashboard-container {
+            background: var(--card-background);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            padding: 3rem;
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Button Grid */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Professional Button Styling */
+        .btn-card {
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            min-height: 120px;
+            justify-content: center;
+        }
+
+        .btn-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .btn-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .btn-card .btn-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .btn-card .btn-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Special Button Variants */
+        .btn-card.income {
+            border-color: var(--success-color);
+        }
+
+        .btn-card.income:hover {
+            border-color: var(--success-dark);
+        }
+
+        .btn-card.income i {
+            color: var(--success-color);
+        }
+
+        .btn-card.expense {
+            border-color: #dc2626;
+        }
+
+        .btn-card.expense:hover {
+            border-color: #b91c1c;
+        }
+
+        .btn-card.expense i {
+            color: #dc2626;
+        }
+
+        .btn-card.analytics {
+            border-color: #7c3aed;
+        }
+
+        .btn-card.analytics:hover {
+            border-color: #6d28d9;
+        }
+
+        .btn-card.analytics i {
+            color: #7c3aed;
+        }
+
+        /* Dropdown Styling */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            min-height: 120px;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .dropdown-toggle:hover {
+            border-color: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .dropdown-toggle i {
+            font-size: 2rem;
+            color: #7c3aed;
+        }
+
+        .dropdown-toggle .btn-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .dropdown-toggle .btn-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .dropdown-menu {
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            padding: 0.5rem;
+            min-width: 200px;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--background-color);
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.875rem;
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .header-content {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .btn-card, .dropdown-toggle {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-card::before, .dropdown-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-card:hover::before, .dropdown-toggle:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/usershome/" class="logo">
+                <i class="fas fa-chart-line"></i> Financial Tracker
+            </a>
+            <a href="/usershome/" class="homepage-btn">
+                <i class="fas fa-home"></i>
+                Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="dashboard-container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Financial Dashboard</h1>
+                <p class="page-subtitle">Select an option to view your financial data and insights</p>
+            </div>
+
+            <!-- Button Grid -->
+            <div class="button-grid">
+                <!-- View Income -->
+                <a href="/view_income/" class="btn-card income">
+                    <i class="fas fa-arrow-up"></i>
+                    <h3 class="btn-title">View Income</h3>
+                    <p class="btn-description">Track and analyze your income sources</p>
+                </a>
+
+                <!-- View Expense -->
+                <a href="/view_expense/" class="btn-card expense">
+                    <i class="fas fa-arrow-down"></i>
+                    <h3 class="btn-title">View Expenses</h3>
+                    <p class="btn-description">Monitor and categorize your expenses</p>
+                </a>
+
+                <!-- Analytics Dropdown -->
+                <div class="dropdown">
+                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3 class="btn-title">Analytics</h3>
+                        <p class="btn-description">Visual insights and reports</p>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="/pie/{{user.id}}/">
+                            <i class="fas fa-chart-pie me-2"></i>Category Overview (Pie Chart)
+                        </a></li>
+                        <li><a class="dropdown-item" href="/bar_chart/{{user.id}}/">
+                            <i class="fas fa-chart-bar me-2"></i>Yearly Overview (Bar Chart)
+                        </a></li>
+                    </ul>
+                </div>
+
+                <!-- Overview -->
+                <a href="/overview/{{user.id}}/" class="btn-card">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <h3 class="btn-title">Overview</h3>
+                    <p class="btn-description">Complete financial summary</p>
+                </a>
+
+                <!-- Transaction History -->
+                <a href="/all_transactions/{{user.id}}/" class="btn-card">
+                    <i class="fas fa-history"></i>
+                    <h3 class="btn-title">Transaction History</h3>
+                    <p class="btn-description">Complete transaction records</p>
+                </a>
+
+                <!-- View Bills -->
+                <a href="/bill/" class="btn-card">
+                    <i class="fas fa-receipt"></i>
+                    <h3 class="btn-title">View Bills</h3>
+                    <p class="btn-description">Manage and track your bills</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS Bundle with Popper for dropdown functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

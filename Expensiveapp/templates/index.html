@@ -1,0 +1,2458 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Expense Tracker | Smart Financial Management</title>
+    <meta name="description" content="Track your spending, unlock your savings.">
+    <meta name="keywords" content="Expense Tracker, Budgeting, Financial Management">
+
+    <!-- Favicons -->
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #6c47ff;
+            --accent-color: #00c9a7;
+            --dark-color: #1a237e;
+            --light-color: #f8f9ff;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --white: #ffffff;
+            --card-shadow: 0 10px 30px rgba(74, 107, 255, 0.1);
+            --section-padding: 120px 0;
+            --border-radius: 16px;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Open Sans', sans-serif;
+        }
+
+        body {
+            color: var(--text-dark);
+            background-color: var(--white);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            color: var(--dark-color);
+            line-height: 1.3;
+        }
+
+        h1 { font-size: 3.5rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 1.75rem; }
+        p { color: var(--text-light); }
+
+        /* Animated Logo */
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-svg {
+            width: 42px;
+            height: 42px;
+            animation: logoFloat 3s ease-in-out infinite;
+            transition: var(--transition);
+        }
+
+        .logo:hover .logo-svg {
+            transform: rotate(15deg) scale(1.1);
+            filter: drop-shadow(0 5px 15px rgba(74, 107, 255, 0.3));
+        }
+
+        .logo .sitename {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Header/Navbar */
+        #header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 30px rgba(74, 107, 255, 0.08);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+
+        #header.sticky {
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(74, 107, 255, 0.1);
+        }
+
+        .navmenu ul {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navmenu a {
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 1.05rem;
+            text-decoration: none;
+            position: relative;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navmenu a i {
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .navmenu a:hover {
+            color: var(--primary-color);
+            background: rgba(74, 107, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .navmenu a:hover i {
+            color: var(--secondary-color);
+        }
+
+        .navmenu a.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        #hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(74, 107, 255, 0.9), rgba(108, 71, 255, 0.85)), url('{% static "img/finance-bg.jpg" %}') no-repeat center center/cover;
+            color: var(--white);
+            padding: 0 30px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.8rem;
+            margin-bottom: 25px;
+            color: var(--white);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.9);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #00d4b8);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 201, 167, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+
+        .btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Floating animation elements */
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            bottom: 100px;
+            right: 100px;
+            animation-delay: 3s;
+            animation-duration: 20s;
+        }
+
+        .shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 30%;
+            right: 10%;
+            animation-delay: 5s;
+            animation-duration: 25s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        /* Sections */
+        .section {
+            padding: var(--section-padding);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title h2 {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            max-width: 700px;
+            margin: 20px auto 0;
+            font-size: 1.1rem;
+        }
+
+        /* About Section */
+        #about {
+            background-color: var(--light-color);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 320px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .about-image:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(74, 107, 255, 0.15);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .about-text h3 {
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .features-list {
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(74, 107, 255, 0.2);
+        }
+
+        .feature-content h4 {
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(74, 107, 255, 0.2);
+            color: var(--white);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover h3,
+        .feature-card:hover p,
+        .feature-card:hover .feature-link {
+            color: var(--white);
+        }
+
+        .feature-img {
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .feature-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-img img {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .feature-content {
+            padding: 25px;
+        }
+
+        .feature-content h3 {
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+
+        .feature-content p {
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .feature-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .feature-link i {
+            margin-left: 8px;
+            transition: var(--transition);
+        }
+
+        .feature-link:hover {
+            color: var(--secondary-color);
+        }
+
+        .feature-link:hover i {
+            transform: translateX(5px);
+        }
+
+        .feature-card:hover .feature-link {
+            color: var(--white);
+        }
+
+        /* Stats Section */
+        #stats {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            text-align: center;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            padding: 30px;
+            position: relative;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-item:last-child::before {
+            display: none;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-number span {
+            font-size: 1.5rem;
+            margin-left: 5px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Articles Section */
+        #articles {
+            background-color: var(--light-color);
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .article-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .article-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(74, 107, 255, 0.15);
+        }
+
+        .article-img {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .article-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .article-card:hover .article-img img {
+            transform: scale(1.1);
+        }
+
+        .article-date {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--accent-color);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .article-content {
+            padding: 25px;
+        }
+
+        .article-content h3 {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        .article-content p {
+            margin-bottom: 20px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            color: var(--text-light);
+        }
+
+        .article-meta i {
+            margin-right: 5px;
+            color: var(--primary-color);
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .read-more i {
+            margin-left: 8px;
+            transition: var(--transition);
+        }
+
+        .read-more:hover {
+            color: var(--secondary-color);
+        }
+
+        .read-more:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Videos Section */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .video-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(74, 107, 255, 0.15);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .video-thumbnail iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: var(--transition);
+            opacity: 0.9;
+        }
+
+        .video-card:hover .play-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translate(-50%, -50%) scale(1.1);
+            opacity: 1;
+        }
+
+        .video-content {
+            padding: 25px;
+        }
+
+        .video-content h3 {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+
+        .video-content p {
+            margin-bottom: 20px;
+        }
+
+        /* Testimonials Section */
+        #testimonials {
+            background: linear-gradient(135deg, rgba(74, 107, 255, 0.03), rgba(108, 71, 255, 0.03));
+        }
+
+        .testimonials-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(74, 107, 255, 0.15);
+        }
+
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .user-details h4 {
+            margin-bottom: 5px;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .rating-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .feedback-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .testimonial-content p {
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* CTA Section */
+        #cta {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-container {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-container h2 {
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .cta-container p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+        }
+
+        .cta-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .cta-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-color);
+            color: var(--white);
+            padding: 100px 0 50px;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto 60px;
+            padding: 0 30px;
+        }
+
+        .footer-col h3 {
+            color: var(--white);
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .footer-about p {
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a i {
+            margin-right: 10px;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .footer-contact p {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-contact i {
+            margin-right: 15px;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition), opacity 0.3s ease;
+            box-shadow: 0 5px 20px rgba(74, 107, 255, 0.3);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        .back-to-top:focus {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 2px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 992px) {
+            .section {
+                padding: 100px 0;
+            }
+
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .about-content {
+                flex-direction: column;
+            }
+
+            .about-image, .about-text {
+                min-width: 100%;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 40px;
+            }
+
+            .back-to-top {
+                bottom: 30px;
+                right: 30px;
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 80px 0;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.4rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-item:nth-child(2)::before {
+                display: none;
+            }
+
+            .articles-grid, .videos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-item::before {
+                display: none;
+            }
+
+            .testimonial-card {
+                padding: 30px 20px;
+            }
+
+            .back-to-top {
+                bottom: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Fallback for when JavaScript is disabled */
+        .testimonials-slider.no-js {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .testimonials-slider.no-js .testimonial-item {
+            min-width: calc(33.333% - 30px);
+            max-width: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .testimonials-slider.no-js .testimonial-item {
+                min-width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .testimonials-slider.no-js .testimonial-item {
+                min-width: 100%;
+            }
+        }
+
+        /* Testimonials Grid Layout */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(74, 107, 255, 0.15);
+        }
+
+        .testimonial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .user-details h4 {
+            margin-bottom: 5px;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .rating-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .feedback-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .testimonial-content p {
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* Responsive adjustments for testimonials grid */
+        @media (max-width: 768px) {
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .testimonial-card {
+                padding: 25px;
+            }
+
+            .testimonial-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+
+        /* Animated Testimonials Slider */
+        .testimonials-slider-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 0 60px;
+        }
+
+        .testimonials-slider {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            width: 100%;
+        }
+
+        .testimonial-slide {
+            min-width: 100%;
+            flex-shrink: 0;
+            opacity: 0.7;
+            transform: scale(0.9);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .testimonial-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .testimonial-slide .testimonial-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-slide .testimonial-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(74, 107, 255, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .testimonial-slide.active .testimonial-card::before {
+            left: 100%;
+        }
+
+        /* Star Animation */
+        .star-animated {
+            animation: starPop 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .star-animated:nth-child(1) { animation-delay: 0.1s; }
+        .star-animated:nth-child(2) { animation-delay: 0.2s; }
+        .star-animated:nth-child(3) { animation-delay: 0.3s; }
+        .star-animated:nth-child(4) { animation-delay: 0.4s; }
+        .star-animated:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes starPop {
+            0% {
+                transform: scale(0) rotate(180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(90deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Navigation Arrows */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: var(--white);
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 5px 20px rgba(74, 107, 255, 0.2);
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-nav:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 8px 25px rgba(74, 107, 255, 0.3);
+        }
+
+        .slider-nav:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .slider-nav.prev {
+            left: 0;
+        }
+
+        .slider-nav.next {
+            right: 0;
+        }
+
+        .slider-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(0.8);
+        }
+
+        .slider-nav:disabled:hover {
+            background: var(--white);
+            color: var(--primary-color);
+            transform: translateY(-50%) scale(0.8);
+        }
+
+        /* Dots Navigation */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(74, 107, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .dot:hover {
+            background: rgba(74, 107, 255, 0.5);
+            transform: scale(1.2);
+        }
+
+        .dot.active {
+            background: var(--primary-color);
+            transform: scale(1.3);
+        }
+
+        .dot.active::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Slide Transition Animations */
+        .testimonial-slide {
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .testimonial-slide.slide-out {
+            animation: slideOut 0.6s ease-in;
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50px) scale(0.9);
+            }
+        }
+
+        /* User Avatar Animation */
+        .user-avatar {
+            animation: avatarGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes avatarGlow {
+            from {
+                box-shadow: 0 0 10px rgba(74, 107, 255, 0.3);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(74, 107, 255, 0.6);
+            }
+        }
+
+        /* Rating Display Animation */
+        .rating-display {
+            animation: ratingSlide 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes ratingSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Content Animation */
+        .testimonial-content {
+            animation: contentFade 0.8s ease-out 0.5s both;
+        }
+
+        @keyframes contentFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adjustments for slider */
+        @media (max-width: 768px) {
+            .testimonials-slider-container {
+                padding: 0 40px;
+            }
+
+            .slider-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .testimonial-slide .testimonial-card {
+                padding: 30px 20px;
+            }
+
+            .slider-dots {
+                margin-top: 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .testimonials-slider-container {
+                padding: 0 30px;
+            }
+
+            .slider-nav {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .testimonial-slide .testimonial-card {
+                padding: 25px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header id="header" class="header d-flex align-items-center">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <div class="logo-container">
+                <a href="/index/" class="logo">
+                    <span class="logo-svg" aria-label="Expense Tracker Logo">
+                        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM20 36C11.16 36 4 28.84 4 20C4 11.16 11.16 4 20 4C28.84 4 36 11.16 36 20C36 28.84 28.84 36 20 36Z" fill="#4A6BFF"/>
+                            <path d="M26.24 14.24L18.48 22L13.76 17.28C13.07 16.59 13.07 15.47 13.76 14.78C14.45 14.09 15.57 14.09 16.26 14.78L18.48 17L23.72 11.76C24.41 11.07 25.53 11.07 26.22 11.76C26.91 12.45 26.93 13.55 26.24 14.24Z" fill="#4A6BFF"/>
+                            <path d="M20 22.48L17.76 24.72C17.07 25.41 15.95 25.41 15.26 24.72C14.57 24.03 14.57 22.91 15.26 22.22L20 17.48L24.74 22.22C25.43 22.91 25.43 24.03 24.74 24.72C24.05 25.41 22.93 25.41 22.24 24.72L20 22.48Z" fill="#4A6BFF"/>
+                        </svg>
+                    </span>
+                    <span class="sitename">Expense Tracker</span>
+                </a>
+            </div>
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav id="navmenu" class="navmenu d-flex">
+                <ul class="d-flex list-unstyled" id="navLinks">
+                    <li><a href="/adminlogin/"><i class="bi bi-person-lock"></i> Admin Login</a></li>
+                    <li><a href="/login/"><i class="bi bi-person"></i> User Login</a></li>
+                    <li><a href="/userfeedback_list/"><i class="bi bi-chat-dots"></i> Feedback</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="section">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="hero-content" data-aos="fade-up">
+            <h1>Take Control of Your Finances with Expense Tracker</h1>
+            <p>Smart budgeting and expense tracking made simple. Achieve your financial goals with our intuitive platform designed for everyone.</p>
+            <div class="hero-buttons">
+                <a href="/user_register/" class="btn btn-primary"><i class="bi bi-rocket"></i> Get Started</a>
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="btn btn-secondary"><i class="bi bi-play-circle"></i> Watch Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="section-title" data-aos="fade-up">
+            <h2>About Expense Tracker</h2>
+            <p>Our mission is to simplify personal finance management for everyone</p>
+        </div>
+        <div class="about-content" data-aos="fade-up">
+            <div class="about-image" data-aos="fade-right">
+                <img src="{% static 'img/hero-img.png' %}" alt="Expense Tracker Dashboard">
+            </div>
+            <div class="about-text" data-aos="fade-left">
+                <h3>Why Choose Our Expense Tracker?</h3>
+                <p>Expense Tracker is more than just a budgeting tool - it's your personal financial assistant. We combine powerful analytics with an intuitive interface to help you understand your spending habits and make better financial decisions.</p>
+                <p>Our platform is built with cutting-edge technology to ensure your data is always secure while providing real-time insights into your financial health.</p>
+                
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>Bank-Level Security</h4>
+                            <p>Your financial data is encrypted and protected with the highest security standards.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>Smart Analytics</h4>
+                            <p>Get personalized insights and recommendations based on your spending patterns.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="bi bi-phone"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>Cross-Platform Sync</h4>
+                            <p>Access your financial data anytime, anywhere across all your devices.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="section-title" data-aos="fade-up">
+            <h2>Powerful Features</h2>
+            <p>Everything you need to manage your finances effectively</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-img">
+                    <img src="{% static 'img/img1.jpg' %}" alt="Budget Planning">
+                </div>
+                <div class="feature-content">
+                    <h3>Smart Budgeting</h3>
+                    <p>Create customized budgets for different categories and track your progress with visual indicators.</p>
+                    <a href="#" class="feature-link">Learn More <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-img">
+                    <img src="{% static 'img/amt4.jpg' %}" alt="Expense Tracking">
+                </div>
+                <div class="feature-content">
+                    <h3>Expense Tracking</h3>
+                    <p>Easily record and categorize expenses with our intuitive interface and automatic categorization.</p>
+                    <a href="#" class="feature-link">Learn More <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-img">
+                    <img src="{% static 'img/amt8.jpg' %}" alt="Financial Reports">
+                </div>
+                <div class="feature-content">
+                    <h3>Detailed Reports</h3>
+                    <p>Generate comprehensive reports and visualize your financial data with interactive charts.</p>
+                    <a href="#" class="feature-link">Learn More <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="stats" class="section">
+        <div class="stats-container">
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-number">10K<span>+</span></div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-number">95<span>%</span></div>
+                <div class="stat-label">Satisfaction Rate</div>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-number">5M<span>+</span></div>
+                <div class="stat-label">Transactions Tracked</div>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-number">24<span>/7</span></div>
+                <div class="stat-label">Support Available</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section id="articles" class="section">
+        <div class="section-title" data-aos="fade-up">
+            <h2>Latest Articles</h2>
+            <p>Learn more about personal finance with our expert advice</p>
+        </div>
+        <div class="articles-grid">
+            <div class="article-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="article-img">
+                    <img src="https://accountaholicsph.com/wp-content/uploads/2021/05/Top-5-Effective-Budgeting-Strategy-for-Your-Business-1024x683.jpg" alt="Budgeting Tips">
+                    <div class="article-date">May 15, 2024</div>
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <span><i class="bi bi-person"></i> John Doe</span>
+                        <span><i class="bi bi-clock"></i> 5 min read</span>
+                    </div>
+                    <h3>5 Budgeting Strategies That Actually Work</h3>
+                    <p>Discover proven methods to create and stick to a budget that aligns with your financial goals and lifestyle.</p>
+                    <a href="#" class="read-more">Read Article <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="article-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="article-img">
+                    <img src="https://i.postimg.cc/FKkYN3g8/102623-01.jpg" alt="Saving Money">
+                    <div class="article-date">June 2, 2024</div>
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <span><i class="bi bi-person"></i> Jane Smith</span>
+                        <span><i class="bi bi-clock"></i> 7 min read</span>
+                    </div>
+                    <h3>The Psychology of Spending: How to Control Impulse Buys</h3>
+                    <p>Understand the mental triggers behind unnecessary spending and learn techniques to overcome them.</p>
+                    <a href="#" class="read-more">Read Article <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="article-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="article-img">
+                    <img src="https://static.vecteezy.com/system/resources/previews/016/247/930/large_2x/business-growth-investment-profit-increase-growing-fast-or-improvement-sales-and-revenue-progress-or-development-concept-businessman-riding-rocket-on-growth-bar-graph-or-rising-up-revenue-chart-vector.jpg" alt="Financial Planning">
+                    <div class="article-date">June 10, 2024</div>
+                </div>
+                <div class="article-content">
+                    <div class="article-meta">
+                        <span><i class="bi bi-person"></i> Michael Johnson</span>
+                        <span><i class="bi bi-clock"></i> 10 min read</span>
+                    </div>
+                    <h3>From Tracking to Investing: Growing Your Savings</h3>
+                    <p>Once you've mastered expense tracking, learn how to put your savings to work through smart investments.</p>
+                    <a href="#" class="read-more">Read Article <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Videos Section -->
+    <section id="videos" class="section">
+        <div class="section-title" data-aos="fade-up">
+            <h2>Educational Videos</h2>
+            <p>Watch our tutorials to get the most out of Expense Tracker</p>
+        </div>
+        <div class="videos-grid">
+            <div class="video-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="video-thumbnail">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/NZ6bye9uSV8?si=eBaBmmv9bTxO7j6l" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+                </div>
+                <div class="video-content">
+                    <h3>Getting Started with Expense Tracker</h3>
+                    <p>A beginner's guide to setting up your account and tracking your first expenses.</p>
+                </div>
+            </div>
+            <div class="video-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="video-thumbnail">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/gD4pixDZq-4?si=NCRrVFMyKltaw16R" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+                </div>
+                <div class="video-content">
+                    <h3>Advanced Budgeting Features Explained</h3>
+                    <p>Learn how to use our advanced tools to create custom budgets and financial goals.</p>
+                </div>
+            </div>
+            <div class="video-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="video-thumbnail">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/mACbPbJ_oSQ?si=mmUBnkQ6Rclj7XeS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <div class="play-btn"><i class="bi bi-play-fill"></i></div>
+                </div>
+                <div class="video-content">
+                    <h3>Financial Wellness: Beyond Expense Tracker</h3>
+                    <p>Expert tips on how to develop healthy financial habits for long-term success.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section">
+        <div class="section-title" data-aos="fade-up">
+            <h2>What Our Users Say</h2>
+            <p>Hear from people who transformed their financial lives</p>
+        </div>
+        
+        <!-- Feedback Stats -->
+        {% if feedback_data %}
+        <div class="feedback-stats" style="text-align: center; margin-bottom: 50px;">
+            <div style="display: inline-flex; align-items: center; gap: 20px; background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+                <div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #fbbf24;">{{ avg_rating }}</div>
+                    <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">Average Rating</div>
+                </div>
+                <div style="width: 1px; height: 40px; background: rgba(255, 255, 255, 0.2);"></div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: 700; color: #4a6bff;">{{ total_feedback }}</div>
+                    <div style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.8);">Total Reviews</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="testimonials-slider-container">
+            <div class="testimonials-slider" id="testimonialsSlider">
+                {% if feedback_data %}
+                    {% for feedback in feedback_data %}
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="100">
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        {{ feedback.username|first|upper }}
+                                    </div>
+                                    <div class="user-details">
+                                        <h4>{{ feedback.username }}</h4>
+                                        <div class="rating-display">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= feedback.rating %}
+                                                    <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                                {% else %}
+                                                    <i class="bi bi-star" style="color: #e2e8f0; font-size: 1.1rem;"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <span class="rating-text">{{ feedback.rating }}/5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feedback-date">
+                                    {{ feedback.created_at|date:"M d, Y" }}
+                                </div>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>{{ feedback.feedback_text }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Fallback testimonials if no feedback data -->
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="100">
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="user-info">
+                                    <div class="user-avatar">S</div>
+                                    <div class="user-details">
+                                        <h4>Sarah Johnson</h4>
+                                        <div class="rating-display">
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <span class="rating-text">5/5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feedback-date">May 15, 2024</div>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>Expense Tracker completely changed how I manage my money. I was able to save 30% more in just three months by identifying unnecessary expenses I didn't even realize I had.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="200">
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="user-info">
+                                    <div class="user-avatar">D</div>
+                                    <div class="user-details">
+                                        <h4>David Chen</h4>
+                                        <div class="rating-display">
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star" style="color: #e2e8f0; font-size: 1.1rem;"></i>
+                                            <span class="rating-text">4/5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feedback-date">June 2, 2024</div>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>As a freelancer, keeping track of my irregular income and expenses was a nightmare. Expense Tracker made it simple and even helped me plan for taxes better.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide" data-aos="fade-up" data-aos-delay="300">
+                        <div class="testimonial-card">
+                            <div class="testimonial-header">
+                                <div class="user-info">
+                                    <div class="user-avatar">R</div>
+                                    <div class="user-details">
+                                        <h4>The Rodriguez Family</h4>
+                                        <div class="rating-display">
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <i class="bi bi-star-fill star-animated" style="color: #fbbf24; font-size: 1.1rem;"></i>
+                                            <span class="rating-text">5/5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feedback-date">June 10, 2024</div>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>The budgeting features helped my family get out of debt faster than we imagined. The visual reports made it easy to see where we could cut back without feeling deprived.</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Navigation Arrows -->
+            <button class="slider-nav prev" id="prevBtn" aria-label="Previous testimonial">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="slider-nav next" id="nextBtn" aria-label="Next testimonial">
+                <i class="bi bi-chevron-right"></i>
+            </button>
+            
+            <!-- Dots Navigation -->
+            <div class="slider-dots" id="sliderDots">
+                {% if feedback_data %}
+                    {% for feedback in feedback_data %}
+                        <button class="dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}"></button>
+                    {% endfor %}
+                {% else %}
+                    <button class="dot active" data-slide="0"></button>
+                    <button class="dot" data-slide="1"></button>
+                    <button class="dot" data-slide="2"></button>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="section">
+        <div class="cta-bg">
+            <img src="{% static 'img/cta-bg.jpg' %}" alt="Background">
+        </div>
+        <div class="cta-container" data-aos="fade-up">
+            <h2>Ready to Transform Your Financial Life?</h2>
+            <p>Join thousands of users who are taking control of their finances with Expense Tracker.</p>
+            <div class="hero-buttons">
+                <a href="/user_register/" class="btn btn-primary"><i class="bi bi-rocket"></i> Get Started Free</a>
+                <a href="/login/" class="btn btn-secondary"><i class="bi bi-person"></i> Login to Account</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col footer-about">
+                <h3>About Expense Tracker</h3>
+                <p>We're dedicated to helping individuals and families take control of their finances through intuitive tracking and insightful analytics.</p>
+                <div class="social-links">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                    <a href="#"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/index/"><i class="bi bi-chevron-right"></i> Home</a></li>
+                    <li><a href="/adminlogin/"><i class="bi bi-chevron-right"></i> Admin Login</a></li>
+                    <li><a href="/login/"><i class="bi bi-chevron-right"></i> User Login</a></li>
+                    <li><a href="/user_register/"><i class="bi bi-chevron-right"></i> Register</a></li>
+                    <li><a href="/userfeedback_list/"><i class="bi bi-chevron-right"></i> Feedback</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="bi bi-chevron-right"></i> Blog</a></li>
+                    <li><a href="#"><i class="bi bi-chevron-right"></i> Help Center</a></li>
+                    <li><a href="#"><i class="bi bi-chevron-right"></i> Tutorials</a></li>
+                    <li><a href="#"><i class="bi bi-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="bi bi-chevron-right"></i> Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="bi bi-geo-alt"></i> 123 Finance Street, Moneyville, MV 12345</p>
+                <p><i class="bi bi-envelope"></i> support@expensetracker.com</p>
+                <p><i class="bi bi-phone"></i> +1 (555) 123-4567</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Expense Tracker. All rights reserved. | Designed with <i class="bi bi-heart-fill"></i> for your financial success</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop" aria-label="Back to Top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="{% static 'vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <script>
+        // Initialize AOS (Animate On Scroll Library)
+        AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true,
+            mirror: false
+        });
+
+        // Sticky Navbar and Back to Top visibility
+        const header = document.querySelector('#header');
+        const backToTop = document.querySelector('#backToTop');
+
+        window.addEventListener('scroll', () => {
+            // Toggle sticky class on header
+            header.classList.toggle('sticky', window.scrollY > 100);
+
+            // Show/hide back to top button
+            backToTop.classList.toggle('active', window.scrollY > 300);
+        });
+
+        // Back to Top button functionality
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Mobile menu toggle
+        const navbarToggle = document.getElementById('navbarToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        navbarToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            navbarToggle.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#navLinks a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                navbarToggle.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for anchor links (excluding back-to-top)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            if (anchor === backToTop) return; // Skip back-to-top button
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize GLightbox for video popups
+        const lightbox = GLightbox({
+            selector: '.glightbox',
+            touchNavigation: true,
+            keyboardNavigation: true,
+            closeButton: true
+        });
+
+        // Testimonials slider functionality
+        const slider = document.getElementById('testimonialsSlider');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        const slides = document.querySelectorAll('.testimonial-slide');
+        
+        console.log('Slider elements found:', {
+            slider: !!slider,
+            prevBtn: !!prevBtn,
+            nextBtn: !!nextBtn,
+            dotsCount: dots.length,
+            slidesCount: slides.length
+        });
+        
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+        
+        // Initialize slider
+        function initSlider() {
+            console.log('Initializing slider with', totalSlides, 'slides');
+            
+            // Remove fallback class if JavaScript is working
+            if (slider) {
+                slider.classList.remove('no-js');
+            }
+            
+            if (totalSlides <= 1) {
+                console.log('Only one slide, hiding navigation');
+                // Hide navigation if only one slide
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                const dotsContainer = document.querySelector('.slider-dots');
+                if (dotsContainer) dotsContainer.style.display = 'none';
+                return;
+            }
+            
+            updateSlider();
+        }
+        
+        // Update slider position and navigation states
+        function updateSlider() {
+            console.log('Updating slider to slide', currentSlide);
+            
+            // Move slider to current slide
+            if (slider) {
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+            
+            // Update slides active state
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+            
+            // Update navigation buttons
+            if (prevBtn) prevBtn.disabled = currentSlide === 0;
+            if (nextBtn) nextBtn.disabled = currentSlide === totalSlides - 1;
+            
+            // Trigger star animations for current slide
+            animateStars(currentSlide);
+        }
+        
+        // Animate stars for the current slide
+        function animateStars(slideIndex) {
+            const currentSlideElement = slides[slideIndex];
+            if (!currentSlideElement) return;
+            
+            const stars = currentSlideElement.querySelectorAll('.star-animated');
+            stars.forEach((star, index) => {
+                // Reset animation
+                star.style.animation = 'none';
+                void star.offsetWidth; // Trigger reflow
+                
+                // Restart animation with delay
+                star.style.animation = `starPop 0.6s ease-out ${index * 0.1}s both`;
+            });
+        }
+        
+        // Go to specific slide with animation
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides && index !== currentSlide) {
+                // Add slide-out animation to current slide
+                slides[currentSlide].classList.add('slide-out');
+                
+                setTimeout(() => {
+                    currentSlide = index;
+                    updateSlider();
+                    
+                    // Remove slide-out class and add slide-in animation
+                    slides.forEach(slide => slide.classList.remove('slide-out'));
+                    slides[currentSlide].classList.add('slide-in');
+                    
+                    setTimeout(() => {
+                        slides[currentSlide].classList.remove('slide-in');
+                    }, 800);
+                }, 300);
+            }
+        }
+        
+        // Next slide with animation
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+        
+        // Previous slide with animation
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+        
+        // Event listeners
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+            console.log('Navigation buttons event listeners added');
+        }
+        
+        // Dot navigation
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => goToSlide(index));
+        });
+        console.log('Dot navigation event listeners added');
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+            }
+        });
+        
+        // Auto-play functionality with enhanced timing
+        let autoPlayInterval;
+        
+        function startAutoPlay() {
+            if (totalSlides > 1) {
+                autoPlayInterval = setInterval(() => {
+                    if (currentSlide < totalSlides - 1) {
+                        nextSlide();
+                    } else {
+                        goToSlide(0); // Reset to first slide
+                    }
+                }, 6000); // Change slide every 6 seconds
+                console.log('Auto-play started');
+            }
+        }
+        
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+        
+        // Pause auto-play on hover
+        const testimonialsContainer = document.querySelector('.testimonials-slider-container');
+        if (testimonialsContainer) {
+            testimonialsContainer.addEventListener('mouseenter', stopAutoPlay);
+            testimonialsContainer.addEventListener('mouseleave', startAutoPlay);
+        }
+        
+        // Initialize slider when DOM is loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSlider);
+        } else {
+            // Small delay to ensure all elements are rendered
+            setTimeout(initSlider, 100);
+        }
+        
+        // Start auto-play after a delay
+        setTimeout(startAutoPlay, 1000);
+
+        // Touch/Swipe support for mobile devices with enhanced sensitivity
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+        
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }
+        
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }
+        
+        function handleSwipe() {
+            const swipeThreshold = 30; // Reduced threshold for better sensitivity
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            
+            // Only trigger if horizontal swipe is more significant than vertical
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > swipeThreshold) {
+                if (diffX > 0) {
+                    // Swipe left - next slide
+                    nextSlide();
+                } else {
+                    // Swipe right - previous slide
+                    prevSlide();
+                }
+            }
+        }
+        
+        // Add touch event listeners to slider
+        if (slider) {
+            slider.addEventListener('touchstart', handleTouchStart, { passive: true });
+            slider.addEventListener('touchend', handleTouchEnd, { passive: true });
+        }
+
+        // Logo animation on hover
+        const logo = document.querySelector('.logo');
+        logo.addEventListener('mouseenter', () => {
+            logo.style.animation = 'none';
+            void logo.offsetWidth; // Trigger reflow
+            logo.style.animation = 'pulse 1s ease';
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const hero = document.getElementById('hero');
+            const scrollPosition = window.pageYOffset;
+            hero.style.backgroundPositionY = scrollPosition * 0.5 + 'px';
+        });
+
+        // Animate elements when they come into view
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('[data-aos]');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementPosition < windowHeight - 100) {
+                    element.classList.add('aos-animate');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+    </script>
+</body>
+
+</html>

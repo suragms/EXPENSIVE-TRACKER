@@ -1,0 +1,35 @@
+{
+  "include": [
+    "Expensive_tracker",
+    "Expensiveapp"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.git",
+    "myvenv"
+  ],
+  "pythonVersion": "3.13",
+  "pythonPlatform": "Windows",
+  "venvPath": ".",
+  "venv": "myvenv",
+  "reportMissingImports": "none",
+  "reportMissingTypeStubs": "none",
+  "typeCheckingMode": "basic",
+  "useLibraryCodeForTypes": true,
+  "reportAttributeAccessIssue": "none",
+  "reportArgumentType": "none",
+  "reportRedeclaration": "warning",
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "pythonVersion": "3.13",
+      "pythonPlatform": "Windows",
+      "extraPaths": [
+        "./myvenv/Lib/site-packages",
+        "."
+      ]
+    }
+  ],
+  "stubPath": "./myvenv/Lib/site-packages"
+}

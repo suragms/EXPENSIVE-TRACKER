@@ -1,0 +1,34 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Python packaging
+*.egg
+*.egg-info/
+
+# Django-specific
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+
+# Virtual environments
+env/
+venv/
+myvenv/
+
+# VS Code project settings
+.vscode/
+
+# macOS and Windows system files
+.DS_Store
+Thumbs.db
+
+# Environment variables / secrets
+.env
+
+# Static and media files (optional — only if generated or collected)
+staticfiles/
+media/

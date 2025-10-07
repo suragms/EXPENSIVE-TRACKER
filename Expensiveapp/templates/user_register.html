@@ -1,0 +1,526 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker | User Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Modern Gradient Background Animation */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #3a1c71, #d76d77, #ffaf7b, #3a1c71);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            max-width: 1200px;
+            width: 90%;
+            min-height: 80vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Left Side - Content */
+        .content-side {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Right Side - Media */
+        .media-side {
+            flex: 1;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 30px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Logo and Header */
+        .logo-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3a1c71, #ffaf7b);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo i {
+            color: white;
+            font-size: 24px;
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #3a1c71;
+            font-weight: 700;
+        }
+
+        .header-text p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Form Styling */
+        .container {
+            background: transparent;
+            padding: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        h2 {
+            text-align: left;
+            color: #3a1c71;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 22px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        input[type="file"] {
+            font-size: 0.9rem;
+            padding: 12px 40px 12px 15px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        input:focus {
+            border-color: #3a1c71;
+            box-shadow: 0 0 0 3px rgba(58, 28, 113, 0.1);
+            outline: none;
+            background: white;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 1rem;
+            pointer-events: none;
+        }
+
+        input:focus + .input-icon {
+            color: #3a1c71;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            text-align: left;
+        }
+
+        .password-match, .password-mismatch {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-match { color: #2ecc71; }
+        .password-mismatch { color: #e74c3c; }
+
+        /* Buttons */
+        button[type="submit"] {
+            background: linear-gradient(135deg, #3a1c71, #d76d77);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(58, 28, 113, 0.2);
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(58, 28, 113, 0.3);
+        }
+
+        .btn-login {
+            background: transparent;
+            color: #3a1c71;
+            padding: 14px;
+            border: 2px solid #3a1c71;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: block;
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #3a1c71, #d76d77);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(58, 28, 113, 0.3);
+        }
+
+        /* Media Side Content */
+        .media-content {
+            margin-bottom: 30px;
+        }
+
+        .media-content h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .article {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .article:hover {
+            transform: translateY(-5px);
+        }
+
+        .article h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+
+        .article p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .article a {
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .article a:hover {
+            text-decoration: underline;
+        }
+
+        .testimonial {
+            font-style: italic;
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .media-side {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .content-side {
+                padding: 25px;
+            }
+            
+            .logo-header {
+                margin-bottom: 20px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+            
+            button[type="submit"], .btn-login {
+                padding: 12px;
+            }
+
+            input {
+                padding: 10px 35px 10px 12px;
+                font-size: 0.85rem;
+            }
+
+            .input-icon {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="content-side">
+            <div class="logo-header">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="header-text">
+                    <h1>Expense Tracker Pro</h1>
+                    <p>Take control of your finances</p>
+                </div>
+            </div>
+            
+            <div class="container">
+                <h2>Create Your Account</h2>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input type="text" name="first_name" id="first_name" placeholder="Enter your first name" required aria-label="First Name">
+                        <i class="fas fa-user input-icon"></i>
+                        {% if form.first_name.errors %}
+                            <div class="error">{{ form.first_name.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" name="last_name" id="last_name" placeholder="Enter your last name" required aria-label="Last Name">
+                        <i class="fas fa-user-tag input-icon"></i>
+                        {% if form.last_name.errors %}
+                            <div class="error">{{ form.last_name.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email_id">Email</label>
+                        <input type="email" name="email_id" id="email_id" placeholder="Enter your email" required aria-label="Email Address">
+                        <i class="fas fa-envelope input-icon"></i>
+                        {% if form.email_id.errors %}
+                            <div class="error">{{ form.email_id.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" name="phone" id="phone" maxlength="10" placeholder="Enter your phone number" required aria-label="Phone Number">
+                        <i class="fas fa-phone input-icon"></i>
+                        {% if form.phone.errors %}
+                            <div class="error">{{ form.phone.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" placeholder="Enter your password" required aria-label="Password">
+                        <i class="fas fa-lock input-icon"></i>
+                        <span class="password-match">Passwords match!</span>
+                        <span class="password-mismatch">Passwords do not match!</span>
+                        {% if form.password.errors %}
+                            <div class="error">{{ form.password.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm your password" required aria-label="Confirm Password">
+                        <i class="fas fa-lock input-icon"></i>
+                        <span class="password-match">Passwords match!</span>
+                        <span class="password-mismatch">Passwords do not match!</span>
+                        {% if form.confirm_password.errors %}
+                            <div class="error">{{ form.confirm_password.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile_image">Profile Image (Optional)</label>
+                        <input type="file" name="profile_image" id="profile_image" accept="image/*" aria-label="Profile Image">
+                        <i class="fas fa-camera input-icon"></i>
+                        {% if form.profile_image.errors %}
+                            <div class="error">{{ form.profile_image.errors|join:", " }}</div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit"><i class="fas fa-user-plus"></i> Register Now</button>
+                    <a href="/login/" class="btn-login"><i class="fas fa-sign-in-alt"></i> Log In</a>
+                </form>
+            </div>
+        </div>
+        
+        <div class="media-side">
+            <div class="media-content">
+                <h3>Master Your Finances</h3>
+                
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/BlXCoRm8YFw?si=0YENwNuvtOYbHHhT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                
+                <div class="article">
+                    <h4>5 Budgeting Tips That Actually Work</h4>
+                    <p>Learn how top financial experts manage their money with these simple yet effective strategies...</p>
+                    <a href="#">Read more →</a>
+                </div>
+                
+                <div class="article">
+                    <h4>The Psychology of Spending</h4>
+                    <p>Understand why we make irrational financial decisions and how to overcome these biases...</p>
+                    <a href="#">Read more →</a>
+                </div>
+            </div>
+            
+            <div class="testimonial">
+                "Expense Tracker Pro helped me save over $5,000 in just 6 months. The insights into my spending habits were eye-opening!" — Sarah J.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Form loaded successfully');
+
+            // Password match validation
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirm_password');
+            const matchMessage = document.querySelector('.password-match');
+            const mismatchMessage = document.querySelector('.password-mismatch');
+
+            function validatePassword() {
+                if (!password || !confirmPassword) {
+                    console.error('Password or confirm password input not found');
+                    return;
+                }
+                if (password.value && confirmPassword.value) {
+                    if (password.value === confirmPassword.value) {
+                        matchMessage.style.display = 'block';
+                        mismatchMessage.style.display = 'none';
+                        confirmPassword.style.borderColor = '#2ecc71';
+                    } else {
+                        matchMessage.style.display = 'none';
+                        mismatchMessage.style.display = 'block';
+                        confirmPassword.style.borderColor = '#e74c3c';
+                    }
+                } else {
+                    matchMessage.style.display = 'none';
+                    mismatchMessage.style.display = 'none';
+                    confirmPassword.style.borderColor = '#ddd';
+                }
+            }
+
+            password?.addEventListener('input', validatePassword);
+            confirmPassword?.addEventListener('input', validatePassword);
+
+            // Input icon animation
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    const icon = input.parentElement.querySelector('.input-icon');
+                    if (icon) icon.style.color = '#3a1c71';
+                });
+                input.addEventListener('blur', () => {
+                    const icon = input.parentElement.querySelector('.input-icon');
+                    if (icon) icon.style.color = '#666';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

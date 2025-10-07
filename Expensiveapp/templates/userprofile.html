@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Expense Tracker | User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header Navigation */
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: #3b82f6;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .nav-btn.secondary {
+            background: #64748b;
+        }
+
+        .nav-btn.secondary:hover {
+            background: #475569;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .profile-header-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-avatar {
+            position: relative;
+        }
+
+        .profile-avatar img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #e2e8f0;
+            background: #f1f5f9;
+        }
+
+        .profile-info h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-info p {
+            color: #64748b;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+
+        .btn-outline:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.125rem;
+        }
+
+        .stat-icon.budget {
+            background: #10b981;
+        }
+
+        .stat-icon.spent {
+            background: #f59e0b;
+        }
+
+        .stat-icon.savings {
+            background: #3b82f6;
+        }
+
+        .stat-title {
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        .stat-change.negative {
+            color: #ef4444;
+        }
+
+        /* Profile Details */
+        .profile-details {
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .detail-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: #1e293b;
+            font-weight: 500;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+        }
+
+        .detail-value.plan {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .main-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            .profile-header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-actions {
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/usershome/" class="logo">
+                <i class="fas fa-chart-pie"></i>
+                <span>Expense Tracker</span>
+            </a>
+            <div class="nav-buttons">
+                <a href="/usershome/" class="nav-btn">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="/view/" class="nav-btn secondary">
+                    <i class="fas fa-chart-line"></i>
+                    Analytics
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        {% if user %}
+        <!-- Profile Header -->
+        <section class="profile-header">
+            <div class="profile-header-content">
+                <div class="profile-avatar">
+                    {% if user.image %}
+                    <img src="{{ user.image.url }}" alt="Profile Picture">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Profile Picture">
+                    {% endif %}
+                </div>
+                <div class="profile-info">
+                    <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+                    <p>{{ user.email_id }}</p>
+                    <div class="profile-actions">
+                        <a href="/userprofile_edit/{{ user.id }}/" class="btn btn-primary">
+                            <i class="fas fa-edit"></i>
+                            Edit Profile
+                        </a>
+                        <a href="/export_user_data/" class="btn btn-outline">
+                            <i class="fas fa-download"></i>
+                            Export Data
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Financial Stats -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon budget">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div>
+                        <div class="stat-title">Monthly Budget</div>
+                        <div class="stat-value">$2,450</div>
+                        <div class="stat-change">+5.2% from last month</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon spent">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div>
+                        <div class="stat-title">Spent This Month</div>
+                        <div class="stat-value">$1,890</div>
+                        <div class="stat-change negative">+12.3% from last month</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon savings">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <div>
+                        <div class="stat-title">Savings Rate</div>
+                        <div class="stat-value">23%</div>
+                        <div class="stat-change">+2.1% from last month</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Details -->
+        <section class="profile-details">
+            <h2 class="section-title">
+                <i class="fas fa-user-circle"></i>
+                Account Information
+            </h2>
+            <div class="details-grid">
+                <div class="detail-item">
+                    <label class="detail-label">
+                        <i class="fas fa-user"></i>
+                        First Name
+                    </label>
+                    <div class="detail-value">{{ user.first_name }}</div>
+                </div>
+
+                <div class="detail-item">
+                    <label class="detail-label">
+                        <i class="fas fa-user"></i>
+                        Last Name
+                    </label>
+                    <div class="detail-value">{{ user.last_name }}</div>
+                </div>
+
+                <div class="detail-item">
+                    <label class="detail-label">
+                        <i class="fas fa-envelope"></i>
+                        Email Address
+                    </label>
+                    <div class="detail-value">{{ user.email_id }}</div>
+                </div>
+
+                <div class="detail-item">
+                    <label class="detail-label">
+                        <i class="fas fa-crown"></i>
+                        Subscription Plan
+                    </label>
+                    <div class="detail-value plan">Premium Plan (Expires: Dec 15, 2025)</div>
+                </div>
+
+                <div class="detail-item">
+                    <label class="detail-label">
+                        <i class="fas fa-dollar-sign"></i>
+                        Primary Currency
+                    </label>
+                    <div class="detail-value">US Dollars (USD)</div>
+                </div>
+
+                <div class="detail-item">
+                    <label class="detail-label">
+                        <i class="fas fa-calendar-alt"></i>
+                        Member Since
+                    </label>
+                    <div class="detail-value">January 2022</div>
+                </div>
+            </div>
+        </section>
+        <!-- Feedback Section -->
+        <section class="profile-details" style="margin-top:2rem;">
+            <h2 class="section-title">
+                <i class="fas fa-comments"></i>
+                Feedback
+            </h2>
+            <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: flex-start;">
+                <p style="color: #64748b; font-size: 1rem;">We value your feedback! Share your experience or see what others have said.</p>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="/userfeedback_list/" class="btn btn-outline">
+                        <i class="fas fa-eye"></i> View All Feedback
+                    </a>
+                    <a href="/feedback_rate" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Feedback
+                    </a>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>

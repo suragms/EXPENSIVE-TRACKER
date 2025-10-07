@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: expensive-tracker
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn Expensive_tracker.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: Expensive_tracker.settings
+      - key: PYTHON_VERSION
+        value: 3.11.8  # ✅ full version

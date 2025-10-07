@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom right, #e0eafc, #cfdef3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative; /* Enables absolute positioning for the homepage button */
+        }
+
+        /* Container Styling */
+        .container {
+            background-color: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            padding: 30px;
+        }
+
+        /* Form Title */
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Form Group Styling */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            transition: border 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+        }
+
+        /* Homepage Button Styling */
+        .homepage-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .homepage-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .homepage-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Homepage Button at the Top Right -->
+    <div class="homepage-btn-container">
+        <a href="/usershome/" class="homepage-btn">Homepage</a>
+    </div>
+    
+    <!-- Expense Form Container -->
+    <div class="container mt-5">
+        <h2>Add Expense</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <!-- Category Dropdown with Custom Option -->
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select class="form-control" id="category" name="category" required onchange="toggleCustomCategory()">
+                    <option value="">Select a category</option>
+                    <option value="Food">Food</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Hospital">Hospital</option>
+                    <option value="Rent">Rent</option>
+                    <option value="EMI">EMI</option>
+                    <option value="Other">Other (Write your own)</option>
+                </select>
+                <!-- Hidden input for custom category -->
+                <input type="text" class="form-control mt-2" id="customCategory" name="customCategory" placeholder="Enter custom category" style="display:none;">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter a brief description (optional)"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" class="form-control" id="amount" name="amount" required step="0.01">
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" class="form-control" id="date" name="date" required>
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Submit Expense</button>
+            
+        </form>
+    </div>
+
+    <!-- JavaScript to Toggle Custom Category Input -->
+    <script>
+        function toggleCustomCategory() {
+            var categorySelect = document.getElementById('category');
+            var customCategoryInput = document.getElementById('customCategory');
+            
+            // Show the custom category input if "Other" is selected
+            if (categorySelect.value === 'Other') {
+                customCategoryInput.style.display = 'block';
+                customCategoryInput.required = true; // Make custom category required when visible
+            } else {
+                customCategoryInput.style.display = 'none';
+                customCategoryInput.required = false; // Remove required when hidden
+            }
+        }
+        // Set max date to today for the date input
+        document.addEventListener('DOMContentLoaded', function() {
+            var today = new Date();
+            var yyyy = today.getFullYear();
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var dd = String(today.getDate()).padStart(2, '0');
+            var maxDate = yyyy + '-' + mm + '-' + dd;
+            document.getElementById('date').setAttribute('max', maxDate);
+        });
+    </script>
+</body>
+</html>

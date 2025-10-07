@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback & Rating - Expense Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2d3748;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 40px 40px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .form-container {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+        
+        input[type="text"], 
+        input[type="email"], 
+        textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #ffffff;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            color: #2d3748;
+        }
+        
+        input[type="text"]:focus, 
+        input[type="email"]:focus, 
+        textarea:focus {
+            border-color: #4f46e5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.5;
+        }
+        
+        .rating-section {
+            text-align: center;
+            margin: 32px 0;
+        }
+        
+        .rating-section label {
+            font-size: 16px;
+            color: #4a5568;
+            margin-bottom: 16px;
+            display: block;
+            font-weight: 500;
+        }
+        
+        .rating {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            flex-direction: row-reverse;
+        }
+        
+        .rating input[type="radio"] {
+            display: none;
+        }
+        
+        .rating label {
+            font-size: 32px;
+            color: #cbd5e0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        .rating label:hover,
+        .rating label:hover ~ label,
+        .rating input[type="radio"]:checked ~ label {
+            color: #fbbf24;
+        }
+        
+        .rating label:hover {
+            transform: scale(1.1);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            margin-top: 8px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Homepage Button Styling */
+        .homepage-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .homepage-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .homepage-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-1px);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 12px;
+            }
+            
+            .header {
+                padding: 30px 20px 25px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .rating label {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 25px 15px 20px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .form-container {
+                padding: 25px 15px;
+            }
+            
+            .rating label {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="homepage-btn-container">
+        <a href="/usershome/" class="homepage-btn">← Back to Home</a>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Feedback & Rating</h1>
+            <p>Help us improve your experience</p>
+        </div>
+        
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="email">Email Address <span style="color: #e53e3e;">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="feedback">Your Feedback <span style="color: #e53e3e;">*</span></label>
+                    <textarea id="feedback" name="feedback_text" placeholder="Please share your thoughts, suggestions, or any issues you've encountered..." required></textarea>
+                </div>
+
+                <div class="rating-section">
+                    <label>Rate Your Experience <span style="color: #e53e3e;">*</span></label>
+                    <div class="rating">
+                        <input type="radio" id="rating5" name="rating" value="5" required>
+                        <label for="rating5" title="Excellent">★</label>
+                        <input type="radio" id="rating4" name="rating" value="4" required>
+                        <label for="rating4" title="Very Good">★</label>
+                        <input type="radio" id="rating3" name="rating" value="3" required>
+                        <label for="rating3" title="Good">★</label>
+                        <input type="radio" id="rating2" name="rating" value="2" required>
+                        <label for="rating2" title="Fair">★</label>
+                        <input type="radio" id="rating1" name="rating" value="1" required>
+                        <label for="rating1" title="Poor">★</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Star rating functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratingInputs = document.querySelectorAll('.rating input[type="radio"]');
+            const ratingLabels = document.querySelectorAll('.rating label');
+            
+            // Add click event to labels
+            ratingLabels.forEach(label => {
+                label.addEventListener('click', function() {
+                    const input = document.getElementById(this.getAttribute('for'));
+                    if (input) {
+                        input.checked = true;
+                        updateStars();
+                    }
+                });
+            });
+            
+            // Update stars when radio changes
+            ratingInputs.forEach(input => {
+                input.addEventListener('change', updateStars);
+            });
+            
+            function updateStars() {
+                const selectedRating = document.querySelector('.rating input[type="radio"]:checked');
+                if (selectedRating) {
+                    const rating = parseInt(selectedRating.value);
+                    ratingLabels.forEach((label, index) => {
+                        if (index < rating) {
+                            label.style.color = '#fbbf24';
+                        } else {
+                            label.style.color = '#cbd5e0';
+                        }
+                    });
+                }
+            }
+            
+            // Form validation
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                const email = document.getElementById('email').value.trim();
+                const feedback = document.getElementById('feedback').value.trim();
+                const rating = document.querySelector('.rating input[type="radio"]:checked');
+                
+                if (!email || !feedback || !rating) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields including the rating.');
+                    return false;
+                }
+                
+                if (!isValidEmail(email)) {
+                    e.preventDefault();
+                    alert('Please enter a valid email address.');
+                    return false;
+                }
+            });
+            
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+        });
+    </script>
+</body>
+</html>

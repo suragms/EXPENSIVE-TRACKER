@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Bill</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Center the container */
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Bill Container Styling */
+        .bill-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        /* Align labels to the left */
+        .form-group label {
+            text-align: left;
+            display: block; /* Ensures the label aligns properly */
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        /* Button Styling */
+        .btn-block {
+            font-size: 16px;
+            padding: 12px;
+        }
+        /* Homepage Button Styling */
+        .homepage-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .homepage-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .homepage-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+    <script>
+        function toggleCustomCategory() {
+            var categorySelect = document.getElementById("category");
+            var customCategoryInput = document.getElementById("customCategory");
+            customCategoryInput.style.display = categorySelect.value === "Other" ? "block" : "none";
+        }
+    </script>
+</head>
+<body><br>
+    <div class="homepage-btn-container">
+        <a href="/usershome/" class="homepage-btn">Homepage</a>
+    </div>
+    <div class="container mt-5">
+     
+        <div class="bill-container">
+            <h2>Add a New Bill</h2>
+            <form method="post" enctype="multipart/form-data"> <!-- Enable file uploads -->
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select class="form-control" id="category" name="category" required onchange="toggleCustomCategory()">
+                        <option value="">Select a category</option>
+                        <option value="Electricity">Electricity</option>
+                        <option value="Water">Water</option>
+                        <option value="Internet">Internet</option>
+                        <option value="Rent">Rent</option>
+                        <option value="Other">Other (Write your own)</option>
+                    </select>
+                    <input type="text" class="form-control mt-2" id="customCategory" name="customCategory" placeholder="Enter custom category" style="display:none;">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount (₹)</label>
+                    <input type="number" name="amount" id="amount" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="due_date">Due Date</label>
+                    <input type="date" name="due_date" id="due_date" class="form-control" required>
+                </div>
+                
+                <script>
+                    // Set reasonable date limits for due dates
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var today = new Date();
+                        var oneYearAgo = new Date();
+                        oneYearAgo.setFullYear(today.getFullYear() - 1);
+                        
+                        var todayStr = today.toISOString().split("T")[0];
+                        var oneYearAgoStr = oneYearAgo.toISOString().split("T")[0];
+                        
+                        // Set minimum date to 1 year ago, maximum to 1 year in the future
+                        var dueDateInput = document.getElementById('due_date');
+                        dueDateInput.setAttribute('min', oneYearAgoStr);
+                        dueDateInput.setAttribute('max', new Date(today.getFullYear() + 1, today.getMonth(), today.getDate()).toISOString().split("T")[0]);
+                        
+                        // Set default value to today
+                        dueDateInput.value = todayStr;
+                    });
+                </script>
+                <div class="form-group">
+                    <label for="image">Upload Image (optional)</label>
+                    <input type="file" name="image" id="image" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Add Bill</button>
+            </form>
+          
+
+        </div>
+    </div>
+
+</body>
+</html>

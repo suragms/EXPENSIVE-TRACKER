@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom right, #f7f9fc, #e3e6f0); /* Softer gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .overview-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1000px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        h2 {
+            color: #4a4a4a; /* Darker grey for the heading */
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .summary-item {
+            flex: 1;
+            margin-right: 20px;
+            padding: 20px;
+            background-color: #f0f4f8; /* Light grey for summary items */
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-item:last-child {
+            margin-right: 0;
+        }
+
+        .balance {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #d1d1d1; /* Light grey for borders */
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4a4a4a; /* Dark grey for table headers */
+            color: white;
+        }
+
+        .negative-balance {
+            color: #d9534f; /* Subtle red for negative balance */
+            font-weight: bold;
+        }
+
+        .alert {
+            background-color: #ffeeba; /* Light yellow for alerts */
+            color: #856404; /* Darker yellow for alert text */
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff; /* Soft blue for buttons */
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: bold;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: scale(1.05);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .summary {
+                flex-direction: column;
+            }
+
+            .summary-item {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+        /* Homepage Button Styling */
+        .homepage-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .homepage-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 9px 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .homepage-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="homepage-btn-container">
+        <a href="/usershome/" class="homepage-btn">Homepage</a>
+        <a href="/view/" class="homepage-btn">Back</a>
+    </div>
+
+    <div class="overview-container">
+  
+        <h2>Overview for {{ user.first_name }} {{ user.last_name }}</h2>
+    
+        <!-- Alert Section -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="summary">
+            <div class="summary-item">
+                <h3>Total Income</h3>
+                <p>₹ {{ total_income }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Total Expenses</h3>
+                <p>₹ {{ total_expenses }}</p>
+            </div>
+            <div class="summary-item">
+                <h3>Current Balance</h3>
+                <p>₹ {{ current_balance }}</p>
+                {% if current_balance < 0 %}
+                    <span class="negative-balance">(Negative Balance)</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <h3>Detailed Income Breakdown</h3>
+        <table>
+            <tr>
+                <th>Source</th>
+                <th>Amount</th>
+            </tr>
+            {% for income in income_sources %}
+            <tr>
+                <td>{{ income.source }}</td>
+                <td>₹ {{ income.amount }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Detailed Expenses Breakdown</h3>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+            </tr>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.category }}</td>
+                <td>₹ {{ expense.amount }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Recent Transactions</h3>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Amount</th>
+            </tr>
+            {% for transaction in recent_transactions %}
+            <tr>
+                <td>{{ transaction.date }}</td>
+                <td>{{ transaction.category }}</td>
+                <td>₹ {{ transaction.amount }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Budget Overview</h3>
+        <div class="budget-overview">
+            <p>You have used ₹ {{ used_budget }} of your total budget of ₹ {{ total_budget }}.</p>
+            <p>Remaining budget: ₹ {{ remaining_budget }}</p>
+            {% if remaining_budget < 0 %}
+                <div class="alert">You have exceeded your budget!</div>
+            {% endif %}
+        </div>
+
+        <!-- <a href="/usershome/" class="btn">Go to Homepage</a> -->
+    </div>
+</body>
+
+</html>
